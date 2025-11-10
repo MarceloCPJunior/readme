@@ -12,20 +12,20 @@ Paralelamente, ocorreu a separação progressiva entre a camada de apresentaçã
 
 No contexto de sistemas financeiros e de pagamentos, a importância dessas evoluções arquiteturais amplifica-se substancialmente. Plataformas de gateway de pagamentos enfrentam desafios complexos e multidimensionais: necessidade de integração com múltiplas instituições bancárias que utilizam padrões heterogêneos de comunicação, demanda por escalabilidade para processar crescentes volumes de transações, exigência de confiabilidade extrema para garantir que transações críticas sejam sempre processadas, imperativos de segurança robusta para proteger dados financeiros sensíveis, e requisitos de conformidade com regulamentações financeiras e de proteção de dados.
 
-Adicionalmente, as organizações que operam tais plataformas necessitam de visibilidade profunda sobre suas operações financeiras. Não basta processsar transações corretamente; é necessário compreender fluxos de caixa, identificar tendências, prever comportamentos futuros e tomar decisões estratégicas baseadas em dados. A ausência de instrumentos adequados para análise consolidada de informações financeiras em tempo real constitui lacuna crítica que limita capacidade de tomada de decisão estratégica.
+Adicionalmente, as organizações que operam tais plataformas necessitam de visibilidade profunda sobre suas operações financeiras. Não basta processar transações corretamente; é necessário compreender fluxos de caixa, identificar tendências, prever comportamentos futuros e tomar decisões estratégicas baseadas em dados. A ausência de instrumentos adequados para análise consolidada de informações financeiras em tempo real constitui lacuna crítica que limita a capacidade de tomada de decisão estratégica.
 
 ### 1.2 Problema
 
 #### 1.2.1 Descrição do Problema Central
 
-O problema central a ser investigado é: **Como desenvolver uma solução tecnológica que abstraia as diferenças entre APIs bancárias distintas, oferecendo uma interface unificada e, ao mesmo tempo, forneça aos usuários informações financeiras estratégicas por meio de dashboards e relatórios?**
+O problema central que se pretende resolver é: **Como desenvolver uma solução tecnológica que abstraia as diferenças entre APIs bancárias distintas, oferecendo uma interface unificada e, ao mesmo tempo, fornecendo aos usuários informações financeiras estratégicas por meio de dashboards e relatórios?**
 
-A integração com múltiplas instituições bancárias constitui desafio fundamental para plataformas de gestão financeira contemporâneas. Cada banco mantém suas próprias APIs, padrões de comunicação, estruturas de dados e protocolos de autenticação. A fragmentação resultante desta heterogeneidade criou cenário no qual aplicações precisam desenvolver código específico para cada instituição, criando acoplamento alto entre a aplicação e implementações de API externas.
+A integração com múltiplas instituições bancárias constitui desafio fundamental para plataformas de gestão financeira contemporâneas. Cada banco mantém suas próprias APIs, padrões de comunicação, estruturas de dados e protocolos de autenticação. A fragmentação resultante desta heterogeneidade cria cenário no qual aplicações precisam desenvolver código específico para cada instituição, gerando acoplamento alto entre a aplicação e implementações de API externas.
 
 Este acoplamento alto introduz múltiplos problemas:
 
 - **Complexidade aumentada**: Código específico de integração com cada banco necessita ser desenvolvido, testado e mantido isoladamente
-- **Dificuldade de escalação**: Adicionar novo banco requer desenvolvimento de novo módulo de integração, aumentando exponencialmente complexidade
+- **Dificuldade de escalação**: Adicionar novo banco requer desenvolvimento de novo módulo de integração, aumentando exponencialmente a complexidade
 - **Propagação de mudanças**: Quando um banco altera sua API, mudanças precisam ser propagadas através de toda a aplicação
 - **Dificuldade de testes**: Ausência de interface unificada complica testes automatizados e cenários de falha
 - **Duplicação de lógica**: Transformação de dados, tratamento de erros e validações frequentemente são reimplementadas para cada banco
@@ -46,17 +46,17 @@ O problema central desdobra-se em questões específicas e interrelacionadas:
 
 ### 1.3 Motivação
 
-A motivação deste trabalho fundamenta-se em múltiplas dimensões complementares:
+A motivação para o desenvolvimento desta proposta fundamenta-se em múltiplas dimensões complementares:
 
-**Dimensão de Negócio**: Organizações que operam plataformas de gateway de pagamentos enfrentam pressão crescente por eficiência operacional e capacidade de tomar decisões rápidas baseadas em dados financeiros. A ausência de arquitetura adequada que unifique integrações e forneça inteligência financeira constitui limitação crítica.
+**Dimensão de Negócio**: Organizações que pretendem operar plataformas de gateway de pagamentos enfrentam pressão crescente por eficiência operacional e capacidade de tomar decisões rápidas baseadas em dados financeiros. A ausência de arquitetura adequada que unifique integrações e forneça inteligência financeira constitui limitação crítica a ser superada.
 
-**Dimensão Técnica e Arquitetural**: A arquitetura de microserviços com padrões de abstração constituem abordagem consolidada para lidar com complexidade de sistemas distribuídos, mas sua aplicação específica no domínio de gateways de pagamentos com múltiplas integrações bancárias permanece desafiadora e pouco documentada em literatura acadêmica e profissional.
+**Dimensão Técnica e Arquitetural**: A arquitetura de microserviços com padrões de abstração constitui abordagem consolidada para lidar com complexidade de sistemas distribuídos, mas sua aplicação específica no domínio de gateways de pagamentos com múltiplas integrações bancárias permanece desafiadora e pouco documentada em literatura acadêmica e profissional.
 
 **Dimensão de Segurança**: Sistemas de gateway financeiro demandam rigor extremo em práticas de segurança, segregação de dados, controle de acesso e auditoria. A demonstração de como arquitetar tais mecanismos fornece conhecimento diretamente aplicável em cenários profissionais reais.
 
 **Dimensão de Engenharia de Software**: A ênfase em abstrações apropriadas, padrões de integração, reprodutibilidade e boas práticas de DevOps alinha-se com melhores práticas consagradas e contemporâneas de engenharia de software.
 
-**Dimensão Educacional**: Este trabalho serve como caso de estudo integrado, permitindo que estudantes e profissionais visualizem concretamente como padrões arquiteturais, padrões de integração, práticas de segurança e princípios de engenharia de software convergem para formar sistema coeso capaz de lidar com complexidade real.
+**Dimensão Educacional**: Este trabalho serve como caso de estudo integrado, permitindo que estudantes e profissionais visualizem concretamente como padrões arquiteturais, padrões de integração, práticas de segurança e princípios de engenharia de software podem convergir para formar sistema coeso capaz de lidar com complexidade real.
 
 ### 1.4 Objetivos
 
@@ -64,13 +64,13 @@ A motivação deste trabalho fundamenta-se em múltiplas dimensões complementar
 
 **Desenvolver uma arquitetura modular para um gateway de pagamentos que possibilite a abstração da integração com diferentes instituições bancárias através de uma API unificada, complementada por painel de gestão financeira que consolide e apresente informações estratégicas para apoiar tomada de decisão.**
 
-Especificamente, a solução proposta deve:
+Especificamente, a solução proposta deverá:
 
 1. **Abstrair heterogeneidade de APIs bancárias**: Criar camada de abstração que unifique comunicação com múltiplas instituições bancárias, permitindo que aplicações cliente se comuniquem através de interface consistente sem necessidade de conhecer detalhes específicos de cada banco
 
 2. **Implementar gateway seguro e confiável**: Desenvolver gateway que garanta segurança robusta de dados financeiros, confiabilidade extrema de processamento de transações, escalabilidade para volumes crescentes, e conformidade com regulamentações
 
-3. **Fornecer dashboard de gestão financeira**: Criar interface que consolide informações financeiras e oferça visualizações claras do estado financeiro da organização
+3. **Fornecer dashboard de gestão financeira**: Criar interface que consolide informações financeiras e ofereça visualizações claras do estado financeiro da organização
 
 4. **Viabilizar relatórios estruturados**: Implementar capacidade de gerar relatórios que permitam análise profunda de operações financeiras
 
@@ -82,7 +82,7 @@ Especificamente, a solução proposta deve:
 
 #### 1.4.2 Objetivos Específicos
 
-Os objetivos específicos que orientam este trabalho incluem:
+Os objetivos específicos que deverão orientar o desenvolvimento incluem:
 
 **Objetivo 1 – Camada de Abstração de Bancos**:
 
@@ -142,21 +142,21 @@ Os objetivos específicos que orientam este trabalho incluem:
 
 #### 1.4.3 Hipóteses Orientadoras
 
-Este trabalho é orientado pelas seguintes hipóteses:
+O desenvolvimento será orientado pelas seguintes hipóteses:
 
-**Hipótese 1**: É possível criar camada de abstração que unifique APIs bancárias heterogêneas sem perder expressividade necessária para operações financeiras complexas
+**Hipótese 1**: Será possível criar camada de abstração que unifique APIs bancárias heterogêneas sem perder expressividade necessária para operações financeiras complexas
 
 **Hipótese 2**: Arquitetura de microserviços com padrões de integração apropriados pode garantir escalabilidade, segurança e confiabilidade requeridas por gateway de pagamentos
 
-**Hipótese 3**: Dashboard e relatórios baseados em dados consolidados facilitam significativamente tomada de decisão financeira em comparação com dados fragmentados
+**Hipótese 3**: Dashboard e relatórios baseados em dados consolidados facilitarão significativamente tomada de decisão financeira em comparação com dados fragmentados
 
-**Hipótese 4**: Projeções financeiras baseadas em análise de padrões históricos produzem estimativas com utilidade prática para planejamento
+**Hipótese 4**: Projeções financeiras baseadas em análise de padrões históricos produzirão estimativas com utilidade prática para planejamento
 
 ### 1.5 Justificativa e Relevância
 
 A relevância desta proposta manifesta-se através de múltiplas dimensões complementares:
 
-**Dimensão Prática e de Negócio**: Gateways de pagamentos constituem infraestrutura crítica para economia digital contemporânea. A capacidade de integrar múltiplos bancos através de interface unificada é requisito fundamental para qualquer plataforma fintech contemporânea. A documentação de arquitetura comprovadamente efetiva oferece valor imediato para profissionais desenvolvendo tais sistemas.
+**Dimensão Prática e de Negócio**: Gateways de pagamentos constituem infraestrutura crítica para economia digital contemporânea. A capacidade de integrar múltiplos bancos através de interface unificada é requisito fundamental para qualquer plataforma fintech contemporânea. A documentação de arquitetura comprovadamente efetiva oferecerá valor imediato para profissionais desenvolvendo tais sistemas.
 
 **Dimensão Técnica de Integração**: A integração com sistemas externos heterogêneos constitui desafio recorrente em engenharia de software. Padrões e práticas documentadas para resolver este desafio com elegância oferecem conhecimento transferível para além do domínio específico de gateways de pagamentos.
 
@@ -245,7 +245,7 @@ No contexto de integração com múltiplas instituições bancárias, o padrão 
 - **Isolamento de mudanças**: Quando banco altera sua API, mudança é isolada ao adaptador específico daquele banco
 - **Testabilidade**: Adaptadores podem ser testados isoladamente com mock de banco
 - **Extensibilidade**: Novo banco requer apenas novo adaptador; código consumidor permanece inalterado
-- **Clareza de código**: Código consumidor trabalha com abstraçao consistente
+- **Clareza de código**: Código consumidor trabalha com abstração consistente
 
 #### 2.3.3 Especificação Unificada
 
@@ -367,7 +367,7 @@ Boas práticas de visualização de dados financeiros incluem:
 
 #### 2.9.1 Fundamentos
 
-Projeções financeiras baseiam-se em análise de padrões históricos:
+Projeções financeiras devem basear-se em análise de padrões históricos:
 
 - **Tendência**: Direção geral dos dados ao longo do tempo
 - **Sazonalidade**: Padrões que se repetem em períodos regulares
@@ -390,7 +390,7 @@ Containerização empacota aplicação com dependências. Orquestração gerenci
 
 - **Portabilidade**: Containers executam em qualquer ambiente
 - **Escalabilidade**: Fácil adicionar mais instâncias
-- **Reprodutibilidade**: Ambiente consistent em diferentes máquinas
+- **Reprodutibilidade**: Ambiente consistente em diferentes máquinas
 
 ---
 
@@ -410,42 +410,42 @@ A arquitetura organiza-se em torno de **dois fluxos principais**:
 - Banco de Dados de Transações → Serviço de Agregação → Motor de Projeção → Dashboard
 - Responsável por consolidar dados, gerar insights e apresentar informações estratégicas
 
-A plataforma proposta compreende os seguintes módulos principais:
+A plataforma proposta compreenderá os seguintes módulos principais:
 
-1. **Frontend de Gestão**: Aplicação cliente moderna que apresenta dashboard de gestão financeira
-2. **Gateway de API**: Serviço público que centraliza autenticação e roteamento
-3. **Orquestrador de Transações**: Serviço interno que coordena processamento de pagamentos
-4. **Adaptadores de Bancos**: Conjunto de adaptadores que normalizam comunicação com diferentes bancos
-5. **Serviço de Agregação**: Processa e consolida dados de transações
-6. **Motor de Inteligência**: Gera projeções e cálculos analíticos
-7. **Banco de Dados Transacional**: Persiste transações e dados operacionais
+1. **Frontend de Gestão**: Aplicação cliente moderna que apresentará dashboard de gestão financeira
+2. **Gateway de API**: Serviço público que centralizará autenticação e roteamento
+3. **Orquestrador de Transações**: Serviço interno que coordenará processamento de pagamentos
+4. **Adaptadores de Bancos**: Conjunto de adaptadores que normalizarão comunicação com diferentes bancos
+5. **Serviço de Agregação**: Processará e consolidará dados de transações
+6. **Motor de Inteligência**: Gerará projeções e cálculos analíticos
+7. **Banco de Dados Transacional**: Persistirá transações e dados operacionais
 8. **Banco de Dados Analítico**: Otimizado para consultas de análise e projeções
 
-Esta arranjo implementa o padrão API Gateway com extensão para incluir padrão de adaptação para integrações heterogêneas, proporcionando ponto de entrada único para requisições de clientes, centralização de autenticação, orquestração de integrações com bancos, e isolamento dos serviços internos.
+Este arranjo implementará o padrão API Gateway com extensão para incluir padrão de adaptação para integrações heterogêneas, proporcionando ponto de entrada único para requisições de clientes, centralização de autenticação, orquestração de integrações com bancos, e isolamento dos serviços internos.
 
-### 3.2 Princípios Arquiteturais Adotados
+### 3.2 Princípios Arquiteturais a Serem Adotados
 
-A proposta segue princípios fundamentais de engenharia de software:
+A proposta seguirá princípios fundamentais de engenharia de software:
 
-**Separação de Responsabilidades**: Cada módulo possui responsabilidade bem definida (apresentação, processamento, agregação, inteligência) e encapsula funcionalidade específica.
+**Separação de Responsabilidades**: Cada módulo possuirá responsabilidade bem definida (apresentação, processamento, agregação, inteligência) e encapsulará funcionalidade específica.
 
-**Modularidade**: Decomposição em componentes independentes com interfaces bem definidas permite desenvolvimento paralelo.
+**Modularidade**: Decomposição em componentes independentes com interfaces bem definidas permitirá desenvolvimento paralelo.
 
-**Coesão Alta**: Funcionalidade dentro de cada módulo é estreitamente relacionada, facilitando compreensão.
+**Coesão Alta**: Funcionalidade dentro de cada módulo será estreitamente relacionada, facilitando compreensão.
 
-**Acoplamento Fraco**: Dependências entre módulos são minimizadas através de comunicação padronizada. Particularmente crítico: adição de novo banco não requer mudanças fora do adaptador específico.
+**Acoplamento Fraco**: Dependências entre módulos serão minimizadas através de comunicação padronizada. Particularmente crítico: adição de novo banco não exigirá mudanças fora do adaptador específico.
 
-**Segurança por Design**: Considerações de segurança são incorporadas desde fases iniciais, com múltiplas camadas de proteção para dados financeiros sensíveis.
+**Segurança por Design**: Considerações de segurança serão incorporadas desde fases iniciais, com múltiplas camadas de proteção para dados financeiros sensíveis.
 
-**Reprodutibilidade**: Ambiente é versionável, portável e reprodutível.
+**Reprodutibilidade**: Ambiente será versionável, portável e reprodutível.
 
-**Observabilidade**: Logging, monitoramento e auditoria permitem visibilidade completa do sistema.
+**Observabilidade**: Logging, monitoramento e auditoria permitirão visibilidade completa do sistema.
 
 ### 3.3 Componentes Principais
 
 #### 3.3.1 Frontend de Gestão
 
-O frontend constitui a camada de apresentação através da qual gestores financeiros interagem com o sistema. É uma aplicação cliente moderna que suporta tanto renderização server-side quanto renderização estática.
+O frontend constituirá a camada de apresentação através da qual gestores financeiros interagirão com o sistema. Será uma aplicação cliente moderna que suportará tanto renderização server-side quanto renderização estática.
 
 **Responsabilidades principais**:
 - Renderizar dashboard com visualizações de dados financeiros
@@ -456,7 +456,7 @@ O frontend constitui a camada de apresentação através da qual gestores financ
 - Implementar proteção contra vulnerabilidades comuns
 
 **Funcionalidades**:
-- **Visão consolidada**: Dashboard que apresenta visão de 360° de estado financeiro
+- **Visão consolidada**: Dashboard que apresentará visão de 360° de estado financeiro
 - **Filtros e buscas**: Capacidade de filtrar dados por período, categoria, banco
 - **Exportação**: Geração de relatórios em formatos padrão
 - **Responsividade**: Acesso via múltiplos dispositivos
@@ -464,41 +464,41 @@ O frontend constitui a camada de apresentação através da qual gestores financ
 
 #### 3.3.2 Gateway de API
 
-O Gateway é serviço backend público que atua como ponto de entrada único para todos os clientes. Implementa o padrão API Gateway.
+O Gateway será serviço backend público que atuará como ponto de entrada único para todos os clientes. Implementará o padrão API Gateway.
 
 **Responsabilidades principais**:
-- **Autenticação**: Valida credenciais de usuário
-- **Autorização**: Verifica permissões para operações
-- **Roteamento**: Encaminha requisições para serviço apropriado
+- **Autenticação**: Validar credenciais de usuário
+- **Autorização**: Verificar permissões para operações
+- **Roteamento**: Encaminhar requisições para serviço apropriado
 - **Rate Limiting**: Proteção contra abuso
-- **Documentação**: Expõe especificação de APIs
-- **Logging**: Registra informações de requisições
-- **Transformação**: Adaptação de dados conforme necessário
+- **Documentação**: Expor especificação de APIs
+- **Logging**: Registrar informações de requisições
+- **Transformação**: Adaptar dados conforme necessário
 
 #### 3.3.3 Orquestrador de Transações
 
 Serviço interno responsável por coordenar processamento de transações através de múltiplos bancos.
 
 **Responsabilidades principais**:
-- **Validação de transação**: Verifica se transação é válida antes de processamento
-- **Seleção de rota**: Determina qual banco processar transação
-- **Invocação de adaptador**: Chamada apropriada para adaptador de banco
+- **Validação de transação**: Verificar se transação é válida antes de processamento
+- **Seleção de rota**: Determinar qual banco processar transação
+- **Invocação de adaptador**: Chamar adaptador apropriado de banco
 - **Tratamento de falhas**: Retry automático, circuit breaker, fallback
-- **Persistência**: Registra transação em banco de dados com status
-- **Notificações**: Comunica resultado para cliente
-- **Auditoria**: Registra completo de operação para conformidade
+- **Persistência**: Registrar transação em banco de dados com status
+- **Notificações**: Comunicar resultado para cliente
+- **Auditoria**: Registrar detalhado de operação para conformidade
 
 #### 3.3.4 Adaptadores de Bancos
 
-Conjunto de adaptadores que normalizam comunicação com diferentes instituições bancárias. Cada adaptador:
+Conjunto de adaptadores que normalizarão comunicação com diferentes instituições bancárias. Cada adaptador:
 
-**Encapsula especificidades do banco**:
+**Encapsulará especificidades do banco**:
 - Autenticação particular
 - Estrutura de dados específica
-- Convenções de error handling
+- Convenções de tratamento de erro
 - Limitações e particularidades técnicas
 
-**Oferece interface unificada**:
+**Oferecerá interface unificada**:
 - Operações padronizadas
 - Transformação de dados
 - Normalização de erros
@@ -506,35 +506,35 @@ Conjunto de adaptadores que normalizam comunicação com diferentes instituiçõ
 
 #### 3.3.5 Serviço de Agregação
 
-Serviço interno que consome eventos de transações e consolida dados para análise.
+Serviço interno que consumirá eventos de transações e consolidará dados para análise.
 
 **Responsabilidades**:
-- **Consumo de eventos**: Processa eventos de transações conforme ocorrem
-- **Limpeza de dados**: Normaliza e valida dados
-- **Agregação**: Calcula agregações (totais diários, mensais, por categoria)
-- **Detecção de anomalias**: Identifica transações inusitadas
-- **Persistência em banco analítico**: Armazena dados otimizados para consultas analíticas
+- **Consumo de eventos**: Processar eventos de transações conforme ocorrem
+- **Limpeza de dados**: Normalizar e validar dados
+- **Agregação**: Calcular agregações (totais diários, mensais, por categoria)
+- **Detecção de anomalias**: Identificar transações inusitadas
+- **Persistência em banco analítico**: Armazenar dados otimizados para consultas analíticas
 
 #### 3.3.6 Motor de Inteligência
 
-Serviço que gera projeções financeiras e cálculos analíticos.
+Serviço que gerará projeções financeiras e cálculos analíticos.
 
 **Responsabilidades**:
-- **Análise de padrões**: Identifica tendências e sazonalidades
-- **Geração de projeções**: Cria estimativas de fluxo futuro
-- **Cálculo de indicadores**: Computa KPIs financeiros
-- **Confidence intervals**: Fornece intervalo de confiança em projeções
-- **Alertas**: Identifica condições que requerem atenção
+- **Análise de padrões**: Identificar tendências e sazonalidades
+- **Geração de projeções**: Criar estimativas de fluxo futuro
+- **Cálculo de indicadores**: Computar KPIs financeiros
+- **Confidence intervals**: Fornecer intervalo de confiança em projeções
+- **Alertas**: Identificar condições que requerem atenção
 
 #### 3.3.7 Bancos de Dados
 
 Dois bancos especializados:
 
-**Banco Transacional**: Otimizado para leitura/escrita de transações. Alta normalização, garantias ACID.
+**Banco Transacional**: Será otimizado para leitura/escrita de transações. Alta normalização, garantias ACID.
 
-**Banco Analítico**: Otimizado para consultas complexas. Estruturado para análises rápidas. Redundância de dados controlada para performance.
+**Banco Analítico**: Será otimizado para consultas complexas. Estruturado para análises rápidas. Redundância de dados controlada para performance.
 
-### 3.4 Fluxos de Comunicação
+### 3.4 Fluxos de Comunicação Propostos
 
 #### 3.4.1 Fluxo de Transação de Pagamento
 
@@ -578,18 +578,18 @@ Dois bancos especializados:
 
 #### 3.4.4 Fluxo de Integração com Novo Banco
 
-1. Equipe técnica cria novo adaptador para o banco
-2. Adaptador implementa interface unificada especificada
-3. Novo adaptador é registrado no Orquestrador
-4. Sistema começa automaticamente a rotear transações para novo banco quando apropriado
-5. Nenhuma mudança necessária em Gateway, Frontend ou outros componentes
-6. Documentação da API expõe novo banco automaticamente
+1. Equipe técnica criará novo adaptador para o banco
+2. Adaptador implementará interface unificada especificada
+3. Novo adaptador será registrado no Orquestrador
+4. Sistema começará automaticamente a rotear transações para novo banco quando apropriado
+5. Nenhuma mudança será necessária em Gateway, Frontend ou outros componentes
+6. Documentação da API exporá novo banco automaticamente
 
-### 3.5 Padrão de Abstração de Bancos
+### 3.5 Padrão de Abstração de Bancos Proposto
 
-O padrão de abstração funciona através de:
+O padrão de abstração funcionará através de:
 
-**Especificação Unificada**: Define operações mínimas que todo banco deve suportar:
+**Especificação Unificada**: Definirá operações mínimas que todo banco deve suportar:
 
 ```
 Interface BancoAdapter {
@@ -602,13 +602,13 @@ Interface BancoAdapter {
 }
 ```
 
-**Implementações Específicas**: Cada banco implementa esta interface encapsulando:
+**Implementações Específicas**: Cada banco implementará esta interface encapsulando:
 - Autenticação específica do banco
 - Transformação de estruturas de dados
 - Tratamento de erros particulares
 - Tratamento de timeouts e retries
 
-**Consumidor Genérico**: Código que usa adaptadores trabalha com interface unificada:
+**Consumidor Genérico**: Código que usa adaptadores trabalhará com interface unificada:
 
 ```
 transacao = orquestrador.processar(requisicao)
@@ -617,7 +617,7 @@ transacao = orquestrador.processar(requisicao)
   persistir(resultado)
 ```
 
-### 3.6 Segurança e Conformidade
+### 3.6 Segurança e Conformidade Propostas
 
 #### 3.6.1 Autenticação Multi-Camada
 
@@ -628,15 +628,15 @@ transacao = orquestrador.processar(requisicao)
 
 #### 3.6.2 Segregação de Dados
 
-- Cada cliente possui dados logicamente isolados
-- Queries automáticas filtram dados do cliente autenticado
-- Acesso entre clientes é impossível por design
+- Cada cliente possuirá dados logicamente isolados
+- Queries automáticas filtrarão dados do cliente autenticado
+- Acesso entre clientes será impossível por design
 
 #### 3.6.3 Logging e Auditoria
 
-- Todas operações financeiras são registradas
-- Registro contém: usuário, operação, timestamp, resultado
-- Logs são imutáveis e auditáveis
+- Todas operações financeiras serão registradas
+- Registro conterá: usuário, operação, timestamp, resultado
+- Logs serão imutáveis e auditáveis
 - Conformidade com regulamentações
 
 #### 3.6.4 Comunicação Segura
@@ -648,23 +648,23 @@ transacao = orquestrador.processar(requisicao)
 
 ---
 
-## 4. Padrões Arquiteturais Adotados
+## 4. Padrões Arquiteturais Propostos
 
 ### 4.1 Padrão de Adaptação
 
-Cada banco é encapsulado em adaptador que normaliza comunicação. Permite adição de novo banco sem mudanças em código consumidor.
+Cada banco será encapsulado em adaptador que normalizará comunicação. Permitirá adição de novo banco sem mudanças em código consumidor.
 
 ### 4.2 Padrão de Orquestração
 
-Orquestrador coordena comunicação entre múltiplos adaptadores e persiste resultados. Implementa lógica de retry e circuit breaker.
+Orquestrador coordenará comunicação entre múltiplos adaptadores e persistirá resultados. Implementará lógica de retry e circuit breaker.
 
 ### 4.3 Padrão de Evento
 
-Processamento de transações emite eventos consumidos por serviços de agregação e inteligência. Comunicação assíncrona e desacoplada.
+Processamento de transações emitirá eventos consumidos por serviços de agregação e inteligência. Comunicação assíncrona e desacoplada.
 
 ### 4.4 Padrão de Agregação
 
-Serviço dedidado consome eventos e produz agregações otimizadas para consultas analíticas.
+Serviço dedicado consumirá eventos e produzirá agregações otimizadas para consultas analíticas.
 
 ### 4.5 Padrão de Resiliência
 
@@ -676,188 +676,222 @@ Múltiplas camadas complementares: transporte, autenticação, autorização, va
 
 ---
 
-## 5. Estratégia de Validação
+## 5. Estratégia de Validação Proposta
 
 ### 5.1 Abordagem de Testes
 
 #### 5.1.1 Testes de Abstração de Bancos
 
-Validam que padrão de adaptação funciona:
-- Cada adaptador implementa interface unificada
-- Adaptador normaliza dados corretamente
-- Erros específicos do banco são tratados
-- Adição de novo adaptador não quebra código existente
+Validarão que padrão de adaptação funciona:
+- Cada adaptador implementará interface unificada
+- Adaptador normalizará dados corretamente
+- Erros específicos do banco serão tratados
+- Adição de novo adaptador não quebrará código existente
 
 #### 5.1.2 Testes de Orquestração
 
-Validam que transações são processadas com segurança:
-- Transações são persistidas antes de processamento
-- Retries funcionam conforme esperado
-- Circuit breaker ativa em falhas recorrentes
-- Transações nunca são perdidas
+Validarão que transações são processadas com segurança:
+- Transações serão persistidas antes de processamento
+- Retries funcionarão conforme esperado
+- Circuit breaker ativará em falhas recorrentes
+- Transações nunca serão perdidas
 
 #### 5.1.3 Testes de Agregação e Inteligência
 
-Validam que dados são consolidados e projeções geradas:
-- Eventos são consumidos corretamente
-- Agregações são calculadas com precisão
-- Projeções são razoavelmente acuradas
-- Dashboard apresenta dados corretos
+Validarão que dados são consolidados e projeções geradas:
+- Eventos serão consumidos corretamente
+- Agregações serão calculadas com precisão
+- Projeções serão razoavelmente acuradas
+- Dashboard apresentará dados corretos
 
 #### 5.1.4 Testes de Segurança
 
-Validam que dados financeiros são protegidos:
-- Autenticação funciona
-- Usuário não consegue acessar dados de outro usuário
-- Operações são auditadas
-- Comunicação com bancos é segura
+Validarão que dados financeiros são protegidos:
+- Autenticação funcionará
+- Usuário não conseguirá acessar dados de outro usuário
+- Operações serão auditadas
+- Comunicação com bancos será segura
 
 #### 5.1.5 Testes End-to-End
 
-Validam fluxos completos:
-- Usuário consegue visualizar transações
-- Relatórios podem ser gerados
-- Projeções são apresentadas
-- Novo banco pode ser integrado sem quebras
+Validarão fluxos completos:
+- Usuário conseguirá visualizar transações
+- Relatórios poderão ser gerados
+- Projeções serão apresentadas
+- Novo banco poderá ser integrado sem quebras
 
-### 5.2 Critérios de Sucesso
+### 5.2 Critérios de Sucesso Esperados
 
-A arquitetura atende seus objetivos quando:
+A arquitetura atingirá seus objetivos quando:
 
-**Abstração Funcional**: Padrão de adaptação permite que novo banco seja integrado sem mudanças fora do adaptador específico
+**Abstração Funcional**: Padrão de adaptação permitirá que novo banco seja integrado sem mudanças fora do adaptador específico
 
-**Confiabilidade**: Transações são processadas com 100% de confiabilidade; nenhuma transação é perdida
+**Confiabilidade**: Transações serão processadas com alta confiabilidade; nenhuma transação será perdida
 
-**Desempenho**: Dashboard carrega em tempo aceitável mesmo com milhões de transações
+**Desempenho**: Dashboard carregará em tempo aceitável mesmo com milhões de transações
 
-**Escalabilidade**: Sistema consegue escalar serviços individuais conforme demanda
+**Escalabilidade**: Sistema conseguirá escalar serviços individuais conforme demanda
 
-**Segurança**: Testes de segurança confirmam que dados financeiros são protegidos
+**Segurança**: Testes de segurança confirmarão que dados financeiros são protegidos
 
-**Usabilidade**: Dashboard é intuitivo e oferece informações úteis para tomada de decisão
+**Usabilidade**: Dashboard será intuitivo e oferecerá informações úteis para tomada de decisão
 
-**Manutenibilidade**: Código segue padrões consistentes e é compreensível
+**Manutenibilidade**: Código seguirá padrões consistentes e será compreensível
 
 ---
 
-## 6. Resultados e Discussão
+## 6. Roadmap de Implementação Proposto
 
-### 6.1 Validação da Abstração de Bancos
+### 6.1 Fase 1: Fundações (Sprints 1-4)
 
-O padrão de adaptação demonstra que é possível abstrair efetivamente heterogeneidade de APIs bancárias. Cada banco é encapsulado em adaptador que normaliza comunicação, permitindo que código consumidor trabalhe com interface consistente.
+**Objetivos**:
+- Estruturar repositórios de código
+- Implementar infraestrutura base (containerização, orquestração)
+- Criar especificação unificada de adaptadores
+- Desenvolver gateway básico com autenticação
 
-Benefícios observados:
-- Adição de novo banco requer apenas novo adaptador
-- Mudanças em banco existente são isoladas ao seu adaptador
-- Código principal permanece inalterado mesmo com mudanças em bancos
-- Testes são simplificados através de mocks de adaptadores
+**Entregáveis**:
+- Ambiente de desenvolvimento reprodutível
+- Primeiro adaptador de banco (piloto)
+- API Gateway funcional
+- Documentação de especificação de adaptadores
 
-### 6.2 Validação da Confiabilidade
+### 6.2 Fase 2: Integração e Confiabilidade (Sprints 5-8)
 
-Orquestrador implementa mecanismos que garantem confiabilidade extrema:
-- Persistência imediata de transações
-- Retry automático com backoff
-- Circuit breaker previne falhas cascata
-- Logs permitem auditoria completa
+**Objetivos**:
+- Implementar 2-3 adaptadores adicionais
+- Desenvolver orquestrador de transações
+- Implementar mecanismos de resiliência (retry, circuit breaker)
+- Criar persistência robusta de transações
 
-Resultado: transações são processadas com confiabilidade apropriada para contexto financeiro.
+**Entregáveis**:
+- Múltiplos adaptadores funcionais
+- Orquestrador com tratamento de falhas
+- Suite de testes de confiabilidade
+- Primeiro fluxo E2E funcional
 
-### 6.3 Validação do Dashboard
+### 6.3 Fase 3: Inteligência Financeira (Sprints 9-12)
 
-Dashboard consolidado oferece visão 360° de estado financeiro:
-- Transações em tempo real com filtros
-- Relatórios estruturados exportáveis
+**Objetivos**:
+- Implementar serviço de agregação
+- Desenvolver motor de inteligência
+- Criar banco de dados analítico
+- Implementar algoritmos de projeção
+
+**Entregáveis**:
+- Serviço de agregação processando eventos
+- Motor de projeção com modelos estatísticos
+- Primeiro conjunto de KPIs calculados
+- Dados analíticos disponíveis para consulta
+
+### 6.4 Fase 4: Dashboard (Sprints 13-16)
+
+**Objetivos**:
+- Implementar frontend de gestão
+- Desenvolver visualizações de dados
+- Criar interface de relatórios
+- Implementar geração de projeções
+
+**Entregáveis**:
+- Dashboard funcional com visualizações
+- Interface de relatórios com exportação
 - Gráficos de tendências e fluxo de caixa
-- Projeções financeiras com intervals de confiança
+- Projeções apresentadas visualmente
 
-Resultado: gestores conseguem tomar decisões informadas rapidamente.
+### 6.5 Fase 5: Segurança e Conformidade (Sprints 17-20)
 
-### 6.4 Desafios Identificados
+**Objetivos**:
+- Implementar auditoria completa
+- Adicionar segregação de dados multi-tenant
+- Auditar segurança do sistema
+- Implementar conformidade regulatória
 
-Arquitetura distribuída introduz complexidade:
-- **Sincronização**: Manter dados sincronizados entre bancos transacional e analítico
-- **Latência**: Projeções devem ser pré-calculadas para evitar latência no dashboard
-- **Conformidade**: Conformidade com regulamentações varia entre jurisdições
-- **Integração**: Cada novo banco requer desenvolvimento específico de adaptador
+**Entregáveis**:
+- Logging e auditoria centralizados
+- Isolamento de dados por tenant
+- Relatórios de conformidade
+- Certificação de segurança
 
-### 6.5 Validação de Objetivos
+### 6.6 Fase 6: Otimização e Produção (Sprints 21-24)
 
-Cada objetivo específico foi validado:
+**Objetivos**:
+- Otimizar performance
+- Preparar para produção
+- Implementar monitoramento em tempo real
+- Treinar usuários
 
-1. **Abstração de bancos**: Padrão de adaptação permite integração limpa
-2. **Gateway robusto**: Orquestrador com retry, circuit breaker, persistência
-3. **Dashboard intuítivo**: Visualizações consolidadas de fácil compreensão
-4. **Relatórios estruturados**: Exportação em múltiplos formatos
-5. **Visualizações estratégicas**: Gráficos de fluxo de caixa e tendências
-6. **Projeções financeiras**: Algoritmos geram estimativas razoáveis
-7. **Validação arquitetural**: Testes confirmam funcionalidade e segurança
+**Entregáveis**:
+- Sistema otimizado para escala
+- Documentação de operações
+- Plataforma pronta para produção
+- Plano de operações
 
 ---
 
-## 7. Conclusões
+## 7. Conclusões Esperadas
 
 ### 7.1 Síntese da Proposta
 
-Este trabalho apresentou uma arquitetura modular para um gateway de pagamentos com integração unificada de múltiplos bancos e dashboard de gestão financeira. A proposta consolida conceitos teóricos com direcionamento prático, demonstrando viabilidade de abordar complexidade inerente a sistemas de pagamento através de princípios arquiteturais bem fundamentados.
+Esta proposta apresenta uma arquitetura modular para um gateway de pagamentos que unificará a integração com múltiplas instituições bancárias através de um padrão de abstração robusto, complementado por um painel de gestão financeira que consolidará e apresentará informações estratégicas. A arquitetura se fundará em princípios consagrados de engenharia de software: separação de responsabilidades, modularidade, acoplamento fraco e segurança em camadas, demonstrando viabilidade de abordar complexidade inerente a sistemas de pagamento contemporâneos.
 
-### 7.2 Alcance dos Objetivos
+### 7.2 Alcance Esperado dos Objetivos
 
-Cada objetivo foi validado através de investigação arquitetural:
+Espera-se que ao final do desenvolvimento, cada objetivo específico tenha sido alcançado:
 
-- Padrão de adaptação permite abstração efetiva de APIs bancárias heterogêneas
-- Orquestrador implementa gateway seguro e confiável
-- Dashboard consolidado oferece visão estratégica de operações
-- Relatórios estruturados facilitam análise profunda
-- Visualizações gráficas comunicam informações de forma intuitiva
-- Projeções financeiras apoiam planejamento futuro
-- Testes abrangentes validam funcionalidade, segurança e confiabilidade
+- Padrão de adaptação permitirá abstração efetiva de APIs bancárias heterogêneas
+- Orquestrador implementará gateway seguro e confiável
+- Dashboard consolidado oferecerá visão estratégica de operações
+- Relatórios estruturados facilitarão análise profunda
+- Visualizações gráficas comunicarão informações de forma intuitiva
+- Projeções financeiras apoiarão planejamento futuro
+- Testes abrangentes validarão funcionalidade, segurança e confiabilidade
 
-### 7.3 Respostas às Questões de Pesquisa
+### 7.3 Respostas Esperadas às Questões de Pesquisa
 
-**Questão 1 – Abstração de APIs Heterogêneas**: O padrão de adaptação oferece resposta elegante, permitindo que novo banco seja integrado isoladamente sem impacto em código existente.
+**Questão 1 – Abstração de APIs Heterogêneas**: O padrão de adaptação oferecerá resposta elegante, permitindo que novo banco seja integrado isoladamente sem impacto em código existente.
 
-**Questão 2 – Gateway Robusto**: Combinação de persistência imediata, retry automático, circuit breaker e logging audita garante confiabilidade apropriada para contexto financeiro.
+**Questão 2 – Gateway Robusto**: Combinação de persistência imediata, retry automático, circuit breaker e logging auditado garantirá confiabilidade apropriada para contexto financeiro.
 
-**Questão 3 – Apresentação de Informações**: Dashboard consolidado com múltiplas perspectivas (transações, relatórios, gráficos, projeções) oferece informações acessíveis e úteis.
+**Questão 3 – Apresentação de Informações**: Dashboard consolidado com múltiplas perspectivas oferecerá informações acessíveis e úteis.
 
-**Questão 4 – Inteligência Financeira**: Serviço dedicado de agregação e motor de inteligência transformam dados transacionais em insights estratégicos.
+**Questão 4 – Inteligência Financeira**: Serviço dedicado de agregação e motor de inteligência transformarão dados transacionais em insights estratégicos.
 
-### 7.4 Contribuições
+### 7.4 Contribuições Esperadas
 
-A proposta contribui em múltiplas dimensões:
+A proposta esperada contribuirá em múltiplas dimensões:
 
-**Técnica**: Demonstra viabilidade de abstração de sistemas heterogêneos através de padrão de adaptação bem estruturado
+**Técnica**: Demonstrará viabilidade de abstração de sistemas heterogêneos através de padrão de adaptação bem estruturado
 
-**Integração**: Oferece padrão para integração de múltiplos sistemas externos em contexto distribuído
+**Integração**: Oferecerá padrão para integração de múltiplos sistemas externos em contexto distribuído
 
-**Segurança**: Propõe defesa em profundidade apropriada para dados financeiros
+**Segurança**: Proporá defesa em profundidade apropriada para dados financeiros
 
-**Engenharia**: Alinha-se com melhores práticas de microserviços, DevOps e engenharia de software
+**Engenharia**: Alinhará-se com melhores práticas de microserviços, DevOps e engenharia de software
 
-**Educacional**: Serve como caso de estudo demonstrando como padrões e princípios convergem
+**Educacional**: Servirá como caso de estudo demonstrando como padrões e princípios convergem
 
-### 7.5 Transferibilidade
+### 7.5 Transferibilidade Esperada
 
-Foco em conceitos e padrões oferece conhecimento transferível:
-- Padrão de adaptação aplicável a qualquer integração de sistemas heterogêneos
-- Princípios de segurança aplicáveis a sistemas que manipulam dados sensíveis
-- Padrões de orquestração aplicáveis a workflows distribuídos
-- Estratégias de visualização aplicáveis a dashboards de qualquer domínio
+Foco em conceitos e padrões oferecerá conhecimento transferível:
+- Padrão de adaptação será aplicável a qualquer integração de sistemas heterogêneos
+- Princípios de segurança serão aplicáveis a sistemas que manipulam dados sensíveis
+- Padrões de orquestração serão aplicáveis a workflows distribuídos
+- Estratégias de visualização serão aplicáveis a dashboards de qualquer domínio
 
-### 7.6 Direções Futuras
+### 7.6 Direções Futuras Propostas
 
-Trabalhos futuros podem explorar:
+Após implementação bem-sucedida, trabalhos futuros poderão explorar:
 
-- Implementação completa em contexto de produção com análise de performance em escala
-- Suporte a pagamentos em tempo real usando protocolos mais rápidos
+- Expansão para suportar criptomoedas e pagamentos internacionais
 - Machine learning avançado para projeções mais acuradas
-- Conformidade multilaterais com regulamentações de diferentes jurisdições
-- Extensão para suportar criptomoedas e pagamentos internacionais
-- Análise em tempo real de fraude usando detecção de anomalias
+- Conformidade multilateral com regulamentações de diferentes jurisdições
+- Suporte a pagamentos em tempo real usando protocolos mais rápidos
+- Análise de fraude em tempo real usando detecção de anomalias
 - Interface móvel otimizada para gestão em movimento
+- Benchmarking competitivo contra soluções comerciais
 
 ---
 
 ## Referências
 
-[A seção de referências deve conter as fontes bibliográficas utilizadas, seguindo padrão apropriado de citação acadêmica. As referências não foram incluídas neste documento para foco na transformação do conteúdo técnico.]
+[A seção de referências deve conter as fontes bibliográficas utilizadas, seguindo padrão apropriado de citação acadêmica.]
