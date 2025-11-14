@@ -62,42 +62,55 @@ para fluxos complexos, Segurança em múltiplas camadas."
 
 # SLIDE 7: RESULTADO 1 - ABSTRAÇÃO [12 segundos]
 
-"Primeiro resultado: abstração de APIs - novo banco sem impacto ao código."
+"Quatro resultados esperados:
 
-"Segundo: gateway robusto - transações nunca perdidas, nunca duplicadas."
+Primeiro, abstração de APIs - cada banco em adaptador próprio, novo banco sem
+impacto ao código.
 
-"Terceiro: dashboard unificado - múltiplos bancos em uma interface."
+Segundo, gateway robusto - transações persistidas imediatamente, retry automático,
+circuit breaker. Zero perda, zero duplicação.
 
-"Quarto: inteligência preditiva - projeções e alertas para decisão estratégica."
+Terceiro, dashboard unificado - múltiplos bancos em uma tela, saldos consolidados,
+relatórios exportáveis.
+
+Quarto, inteligência preditiva - projeções de fluxo futuro, alertas de anomalias,
+suporte à decisão estratégica."
 
 ---
 
 # SLIDE 8-9-10: PRÓXIMOS PASSOS [40 segundos]
 
-"Desenvolvimento em 6 fases, 24 sprints, 12 meses.
+"Desenvolvimento planejado em 6 fases, 24 sprints.
 
-Fase 1: Fundações - infraestrutura e primeiro adaptador. 
-Fase 2: Integração - múltiplos adaptadores e confiabilidade. 
-Fase 3: Inteligência - agregação e projeções. 
-Fase 4: Dashboard - frontend e visualizações. 
-Fase 5: Segurança - auditoria e conformidade. 
-Fase 6: Produção - otimização e 24/7.
+Fase 1, Fundações: infraestrutura containerizada, primeiro adaptador bancário,
+API Gateway funcional. Ambiente reprodutível.
 
-Cada fase valida entregas concretas."
+Fase 2, Integração: múltiplos adaptadores de bancos reais, orquestrador
+sofisticado, mecanismos de confiabilidade - retry e circuit breaker. Fluxo
+end-to-end operacional."
 
----
+"Fase 3, Inteligência: serviço de agregação processando eventos continuamente,
+motor de projeções com modelos estatísticos, banco analítico otimizado. Primeiros
+KPIs calculados.
 
-# CONCLUSÃO [8 segundos]
+Fase 4, Dashboard: frontend moderno e responsivo, visualizações de dados
+financeiros intuitivas, interface de relatórios com exportação em múltiplos
+formatos."
 
-"Em resumo: sistema que unifica, simplifica e oferece inteligência para operações 
-financeiras. Solução robusta, segura e escalável."
+"Fase 5, Segurança: auditoria centralizada completa, segregação multi-tenant
+rigorosa, conformidade validada com LGPD e PCI-DSS. Testes de penetração.
+
+Fase 6, Produção: otimização de performance, escalabilidade automática,
+monitoramento em tempo real, documentação operacional completa. Sistema
+production-ready rodando 24/7."
 
 ---
 
 # AGRADECIMENTO [8 segundos]
 
-"Agradecemos ao Professor Marcelo, à Coordenação, e à banca. Muito obrigado. 
-Ficamos à disposição para perguntas."
+"Agradecemos ao Professor Marcelo pela orientação, à Coordenação pela infraestrutura,
+e aos membros da banca pelo tempo dedicado. Muito obrigado. Ficamos à disposição
+para perguntas."
 
 ---
 
