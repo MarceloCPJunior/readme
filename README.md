@@ -64,27 +64,15 @@ para fluxos complexos, Segurança em múltiplas camadas."
 
 "Primeiro resultado: abstração de APIs - novo banco sem impacto ao código."
 
----
-
-# SLIDE 8: RESULTADO 2 - GATEWAY ROBUSTO [12 segundos]
-
 "Segundo: gateway robusto - transações nunca perdidas, nunca duplicadas."
 
----
-
-# SLIDE 9: RESULTADO 3 - VISÃO CONSOLIDADA [12 segundos]
-
 "Terceiro: dashboard unificado - múltiplos bancos em uma interface."
-
----
-
-# SLIDE 10: RESULTADO 4 - INTELIGÊNCIA [12 segundos]
 
 "Quarto: inteligência preditiva - projeções e alertas para decisão estratégica."
 
 ---
 
-# SLIDE 11: PRÓXIMOS PASSOS [40 segundos]
+# SLIDE 8-9-10: PRÓXIMOS PASSOS [40 segundos]
 
 "Desenvolvimento em 6 fases, 24 sprints, 12 meses.
 
