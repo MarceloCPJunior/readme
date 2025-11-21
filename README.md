@@ -1,1256 +1,651 @@
-# Estudo Completo: Criptografia Assimétrica e Certificação Digital
+# Guia de Estudo Rápido para Prova - Criptografia Assimétrica e Certificação Digital
+
+## RESUMO EXECUTIVO POR AULA
+
+---
 
 ## UNIDADE 3 - ALGORITMOS CRIPTOGRÁFICOS ASSIMÉTRICOS
 
----
+### ⭐ AULA 01: CSPRNG
 
-### AULA 01 - GERADORES DE NÚMEROS PSEUDO-ALEATÓRIOS CRIPTOGRÁFICOS (CSPRNG)
+**Conceito Central:**
+Um gerador que produz números verdadeiramente aleatórios para uso em criptografia, impossíveis de prever mesmo sabendo os valores anteriores.
 
-#### O que é CSPRNG?
+**Características Essenciais:**
+- ✅ Resistente à previsão
+- ✅ Irreversível
+- ✅ Passa em testes estatísticos rigorosos
+- ✅ Alta entropia
 
-Um **Gerador de Números Pseudo-Aleatórios Criptograficamente Seguro (CSPRNG)** é um algoritmo especial projetado para gerar números aleatórios que são adequados para aplicações criptográficas. Diferencia-se de um PRNG comum pela sua resistência a ataques e imprevisibilidade.
+**Diferença Crítica (PRNG vs CSPRNG):**
+- PRNG: Simula aleatoriedade (simulações, jogos)
+- CSPRNG: Verdadeiramente aleatório (chaves, segurança)
 
-#### Diferenças entre PRNG e CSPRNG
+**Aplicações Vitais:**
+- Geração de chaves criptográficas
+- Geração de nonces
+- Assinaturas digitais
 
-| Aspecto | PRNG | CSPRNG |
-|--------|------|--------|
-| **Previsibilidade** | Previsível com conhecimento da semente | Imprevisível, resistente a ataques |
-| **Aplicação** | Simulações, jogos, aplicações gerais | Criptografia, geração de chaves |
-| **Entropia** | Entropia limitada | Entropia de alta qualidade |
-| **Reversibilidade** | Pode ser revertido | Irreversível |
-| **Testes Estatísticos** | Satisfaz testes básicos | Passa em testes estatísticos rigorosos |
-
-#### Propriedades Essenciais do CSPRNG
-
-1. **Resistência à Previsão**: Impossível prever sequências futuras conhecendo-se valores anteriores
-2. **Irreversibilidade**: Mesmo com acesso ao estado interno roubado, não é possível recuperar sequências passadas
-3. **Fortuidade**: A saída deve parecer totalmente aleatória em testes estatísticos
-
-#### Aplicações Críticas do CSPRNG
-
-- **Geração de Chaves Criptográficas**: A segurança da chave depende da qualidade do CSPRNG
-- **Geração de Nonces**: Números únicos e aleatórios para protocolos
-- **Cifras de Uso Único**: Garantem sigilo perfeito
-- **Sais em Esquemas de Assinatura**: ECDSA, RSASSA-PSS
-- **Gerenciamento de Cookies e Tokens**: Segurança em aplicações web
-
-#### Algoritmos Comuns de CSPRNG
-
-**1. HMAC-DRBG (Baseado em HMAC)**
-- Usa algoritmo HMAC (Hash-based Message Authentication Code)
-- Gerencia estado duplo: chave K e valor pseudoaleatório V
-- Maior resistência a ataques
-
-**2. PRNG Baseado em SHA-256**
-- Algoritmo hash SHA-256
-- Não requer chaves adicionais
-- Mecanismo mais simples, mas resistência a ataques inferior ao HMAC-DRBG
-
-#### Geração de Sementes Aleatórias
-
-O CSPRNG necessita de uma semente inicial de alta entropia:
-- **Fontes de Sistema Operacional**: `/dev/urandom` (Linux), `CryptGenRandom` (Windows)
-- **Hardware de Segurança**: HSM (Hardware Security Modules)
-- **Número Verdadeiramente Aleatório (TRNG)**: Fontes verdadeiramente aleatórias do SO
-
-#### Vantagem do CSPRNG sobre TRNG
-
-O CSPRNG amplia a entropia disponível. Enquanto um TRNG é limitado pela capacidade do pool de entropia do sistema, o CSPRNG consegue gerar mais bits aleatórios quando necessário.
+**Algoritmos Principais:**
+1. HMAC-DRBG: Estado duplo (K, V), muito seguro
+2. SHA-256 DRBG: Mais simples, segurança boa
 
 ---
 
-### AULA 02 - PRINCÍPIOS DE CRIPTOGRAFIA DE CHAVE PÚBLICA
+### ⭐ AULA 02: CRIPTOGRAFIA DE CHAVE PÚBLICA
 
-#### Conceito Fundamental
+**Princípio Revolucionário (1976):**
+Duas chaves diferentes: pública (divulga) e privada (guarda)
 
-A criptografia de chave pública (ou assimétrica) revolucionou a segurança em 1976 com Diffie e Hellman. Usa **dois pares de chaves distintas**: uma pública (divulgável) e uma privada (secreta).
-
-#### Funcionamento Básico
-
+**Fluxo Básico:**
 ```
-Remetente recupera a chave pública do destinatário
-          ↓
-Remetente cifra mensagem com chave pública
-          ↓
-Mensagem é enviada criptografada
-          ↓
-Destinatário descriptografa com sua chave privada
-          ↓
-Somente quem tem a chave privada consegue descriptografar
+Remetente → chave pública do destinatário → criptografa
+Criptografia enviada →
+Destinatário → chave privada (só ele tem) → descriptografa
 ```
 
-#### Princípios Essenciais
+**Garantias Fornecidas:**
+- Confidencialidade: Só quem tem chave privada acessa
+- Autenticação: Criptografar com privada prova identidade
+- Não-repúdio: Não pode negar o que assinou
 
-1. **Confidencialidade**: Qualquer pessoa pode criptografar (usando chave pública), mas apenas o detentor da chave privada pode descriptografar
-2. **Autenticação**: Criptografar com a chave privada e verificar com a pública prova identidade
-3. **Não-repúdio**: Quem assinou com chave privada não pode negar assinatura
+**Vantagem Suprema:**
+Elimina problema de troca segura de chaves (problema crítico da simétrica)
 
-#### Vantagens da Criptografia Assimétrica
-
-- **Eliminação do Problema de Troca de Chaves**: Não precisa compartilhar a chave de forma segura
-- **Escalabilidade**: Funciona bem para muitos participantes
-- **Auditabilidade**: Permite assinatura digital com validade jurídica
-- **Infraestrutura de Chaves Públicas (PKI)**: Base para confiança digital
-
-#### Desvantagens
-
-- **Lentidão**: Computacionalmente intensiva (100 a 1000x mais lenta que simétrica)
-- **Uso de Recursos**: Consumo significativo de processamento e memória
-- **Tamanho de Dados**: Limitada a pequenos volumes de dados
-
-#### Abordagem Híbrida (Padrão na Prática)
-
-A indústria usa uma **combinação de ambos os métodos**:
-1. Criptografia assimétrica distribui a chave de sessão
-2. Criptografia simétrica criptografa os dados em volume
-3. Resultado: Segurança + Eficiência
+**Padrão Atual (Híbrido):**
+- Assimétrica: Distribuir chave de sessão (segura)
+- Simétrica: Criptografar dados (eficiente)
 
 ---
 
-### AULA 03 - ALGORITMO RSA
+### ⭐ AULA 03: RSA
 
-#### O que é RSA?
+**O Algoritmo do Mundo:**
+90% das implementações de criptografia pública usam RSA
 
-**RSA (Rivest-Shamir-Adleman)** é o algoritmo assimétrico mais utilizado no mundo. Desenvolvido em 1977, baseia-se no problema matemático da fatoração de números grandes.
+**Base Matemática:**
+Fatorar dois primos grandes é computacionalmente impossível
 
-#### Fundamento Matemático
-
-A segurança do RSA repousa em um princípio simples: é fácil multiplicar dois números primos grandes, mas é computacionalmente difícil fatorar o resultado.
-
-```
-Multiplicação Fácil:    p × q = n  (rápido)
-Fatoração Difícil:      n = p × q  (muito lento)
-```
-
-#### Geração de Chaves RSA
-
-**Processo passo a passo:**
-
-1. **Seleção de Primos**: Escolher dois números primos grandes distintos (p e q)
-   - Devem estar suficientemente afastados um do outro
-   - Exemplo: p = 61, q = 53
-
-2. **Cálculo de N**: n = p × q
-   - Exemplo: n = 61 × 53 = 3.233
-
-3. **Cálculo de φ(n)**: φ(n) = (p-1) × (q-1)
-   - Função totiente de Euler
-   - Exemplo: φ(3233) = 60 × 52 = 3.120
-
-4. **Escolha de E**: Selecionar e tal que 1 < e < φ(n) e mdc(e, φ(n)) = 1
-   - Comumente: e = 65.537
-   - Exemplo: e = 17
-
-5. **Cálculo de D**: Encontrar d tal que (e × d) mod φ(n) = 1
-   - d é o inverso multiplicativo de e módulo φ(n)
-   - Exemplo: d = 2.753
-
-**Chave Pública**: (e, n)
-**Chave Privada**: (d, n)
-
-#### Processo de Criptografia
+**Processo de Geração de Chaves:**
 
 ```
-Mensagem M criptografada:
-C = M^e mod n
+1. Escolher dois primos grandes: p e q
+2. Calcular n = p × q
+3. Calcular φ(n) = (p-1) × (q-1)
+4. Escolher e (expoente público): 1 < e < φ(n) e mdc(e,φ(n))=1
+   → Comumente: e = 65.537
+5. Calcular d (expoente privado): (e × d) mod φ(n) = 1
+   → d é inverso multiplicativo de e
+
+Resultado:
+- Chave Pública: (e, n)
+- Chave Privada: (d, n)
 ```
 
-#### Processo de Descriptografia
+**Operações:**
 
-```
-Mensagem descriptografada:
-M = C^d mod n
-```
+Criptografia: C = M^e mod n (elevado a e)
+Descriptografia: M = C^d mod n (elevado a d)
 
-#### Tamanhos de Chave RSA
+**Tamanhos Recomendados:**
+- 512 bits: ❌ Quebrado
+- 1024 bits: ❌ Inseguro
+- 2048 bits: ✅ Seguro até 2030
+- 4096 bits: ✅ Seguro longo prazo
 
-| Tamanho | Aplicação | Segurança |
-|---------|-----------|-----------|
-| 512 bits | Obsoleto | Muito fraca |
-| 1024 bits | Inadequado | Fraca |
-| 2048 bits | Recomendado | Boa (até 2030) |
-| 4096 bits | Alta Segurança | Excelente |
+**Segurança em Números:**
+Fatorar 2048 bits = bilhões de anos com computadores atuais
 
-#### Segurança do RSA
-
-**Baseada no Problema NP de Fatoração**
-
-- O algoritmo mais rápido conhecido (NFS - Number Field Sieve) é exponencial
-- Fatorar um número de 2048 bits levaria bilhões de anos com computadores atuais
-- Ameaça: Computadores quânticos podem quebrar RSA em tempo polinomial
-
-#### Limitações do RSA
-
-- **Tamanho de Dados**: Mensagens devem ser menores que n
-- **Velocidade**: Mais lento que criptografia simétrica
-- **Padding Necessário**: Requer esquemas como OAEP para segurança
-
-#### Aplicações do RSA
-
-- Certificados digitais (X.509)
-- Assinatura digital
-- Distribuição segura de chaves
-- Infraestrutura de Chaves Públicas (PKI)
-- Protocolos TLS/SSL em HTTPS
+**Ameaça Futura:**
+Computadores quânticos podem quebrar RSA em tempo polinomial
 
 ---
 
-### AULA 04 - PRETTY GOOD PRIVACY (PGP)
+### ⭐ AULA 04: PGP (Pretty Good Privacy)
 
-#### O que é PGP?
+**Filosofia:**
+Privacidade é direito, não privilégio. Descentralizado, sem autoridades centrais.
 
-**Pretty Good Privacy** é um software de criptografia desenvolvido por Phil Zimmermann em 1991 que fornece autenticação, privacidade criptográfica e sigilo para comunicações digitais. É um sistema híbrido que combina criptografia simétrica e assimétrica.
+**Tipo de Sistema:**
+HÍBRIDO: Combina simetria (rápido) + assimetria (seguro)
 
-#### Filosofia do PGP
-
-- Privacidade como direito fundamental
-- Resistiu a pressões governamentais desde a criação
-- Operacionaliza a "Rede de Confiança" (Web of Trust) em vez de autoridades centralizadas
-
-#### Arquitetura Híbrida do PGP
+**Fluxo de Encriptação PGP:**
 
 ```
-ENTRADA: Mensagem em Texto Simples
+Mensagem Original
     ↓
-[1] COMPRESSÃO: Reduz tamanho e aumenta segurança
+1. COMPRESSÃO
+   └─ Reduz tamanho, aumenta segurança
     ↓
-[2] GERAÇÃO DE CHAVE DE SESSÃO: Aleatória (usando CSPRNG)
+2. CHAVE DE SESSÃO ALEATÓRIA
+   └─ Gerada por mouse/teclado + teste de primalidade
     ↓
-[3] CRIPTOGRAFIA SIMÉTRICA: Com chave de sessão (IDEA/AES-256)
+3. CRIPTOGRAFIA SIMÉTRICA (IDEA/AES-256)
+   └─ Criptografa dados
     ↓
-[4] CRIPTOGRAFIA ASSIMÉTRICA: Chave de sessão cifrada com chave pública do destinatário (RSA)
+4. RSA CRIPTOGRAFIA (Assimétrica)
+   └─ Criptografa chave de sessão com chave pública do destinatário
     ↓
-SAÍDA: Dados cifrados + Chave de sessão criptografada
+SAÍDA: Dados criptografados + Chave de sessão encriptada
 ```
 
-#### Funções de Criptografia no PGP
-
-**Passo 1: Compressão**
-- Reduz tamanho do arquivo
-- Aumenta força criptográfica
-- Remove padrões que criptanalistas exploram
-
-**Passo 2: Geração de Chave de Sessão**
-- Combinação de:
-  - Movimentos aleatórios do mouse
-  - Pressionamentos aleatórios do teclado
-  - Teste de primalidade probabilístico
-- Resulta em chave única para cada mensagem
-
-**Passo 3: Encriptação Simétrica**
-- Algoritmo: IDEA (International Data Encryption Algorithm)
-- Alternativas modernas: AES-256
-- Apenas Alice (remetente) e Bob (destinatário) têm a chave de sessão
-
-**Passo 4: Encriptação da Chave de Sessão**
-- RSA criptografa a chave de sessão
-- Bob descriptografa com sua chave privada
-- Depois descriptografa a mensagem com a chave de sessão
-
-#### Assinatura Digital no PGP
-
+**Assinatura Digital no PGP:**
 ```
-ENTRADA: Mensagem
+Mensagem
     ↓
-CÁLCULO DE HASH: Resumo único da mensagem (SHA-1/SHA-256)
+Hash (SHA-1/SHA-256)
     ↓
-ENCRIPTAÇÃO COM CHAVE PRIVADA: Cria assinatura
+Encripta com chave PRIVADA
     ↓
-SAÍDA: Mensagem + Assinatura Digital
+ASSINATURA DIGITAL
     ↓
-VERIFICAÇÃO (Bob):
-    - Descriptografa assinatura com chave pública de Alice
-    - Calcula hash da mensagem recebida
-    - Compara hashes
-    - Se iguais: Mensagem autêntica e íntegra
+Verificação:
+- Descriptografa com chave PÚBLICA
+- Recalcula hash
+- Compara = AUTÊNTICO
 ```
 
-#### Recursos Principais do PGP
+**Modelo de Confiança: Web of Trust**
+- Descentralizado (vs autoridades certificadoras)
+- Cada usuário atesta identidade de outros
+- Formação emergente de confiança
+- Flexível, menos formal
 
-| Recurso | Função |
-|---------|--------|
-| **Confidencialidade** | Criptografia forte garante privacidade |
-| **Autenticação** | Assinatura digital verifica identidade |
-| **Integridade** | Detecção de alteração de mensagem |
-| **Não-repúdio** | Impossível negar assinatura |
-| **Compressão** | Reduz tamanho da transmissão |
-| **Compatibilidade** | Padrão OpenPGP (RFC 4880) |
-
-#### Rede de Confiança (Web of Trust)
-
-**Diferente de Autoridades Certificadoras centralizadas:**
-- Usuários atestam identidade uns dos outros
-- Criação descentralizada de confiança
-- Mais flexível, menos hierárquico
-- Cada usuário tem "chave raiz de confiança"
-
-#### Keyring (Chaveiro)
-
-Arquivo local que contém:
-- **Chave pública própria**
-- **Chave privada própria** (criptografada com passphrase)
-- **Chaves públicas de contatos** (com níveis de confiança)
-
-#### Vantagens do PGP
-
-- Forte segurança criptográfica (vários milhões de anos para quebrar)
-- Decentralizado (sem dependência de autoridades)
-- Auditado e aprovado pela comunidade criptográfica
-- Compatível com padrões abertos
-
-#### Limitações do PGP
-
-- Complexidade de uso
-- Gerenciamento de chaves pode ser confuso
-- Problema de distribuição da chave pública inicial
-- Interface não amigável em versões antigas
-
-#### Aplicações Modernas
-
-- Encriptação de e-mail
-- Assinatura de softwares
-- Proteção de dados sensíveis
-- Comunicação entre jornalistas e fontes
-- Ativismo digital e direitos humanos
+**Vantagens do PGP:**
+- Criptografia provada matematicamente
+- Descentralizado (sem ponto único de falha)
+- Auditado pela comunidade
+- Código aberto
 
 ---
 
-### AULA 05 - TÓPICOS AVANÇADOS EM CRIPTOGRAFIA ASSIMÉTRICA
+### ⭐ AULA 05: TÓPICOS AVANÇADOS
 
-#### Variações e Melhorias de RSA
+**Variações de RSA:**
+- OAEP: Adiciona padding aleatório (mais seguro)
+- RSASSA-PSS: Assinatura probabilística (mais segura)
 
-**RSASSA-PSS (Probabilistic Signature Scheme)**
-- Adiciona elemento aleatório à assinatura
-- Mais seguro que esquemas determinísticos
-- Padrão recomendado (RFC 3447)
+**Alternativas ao RSA (Futuro):**
+- **ECC (Curvas Elípticas):** 256-bit ECC ≈ 3072-bit RSA
+- **ECDSA:** Assinatura em curvas elípticas (Bitcoin usa)
+- **Diffie-Hellman:** Acordo de chave (não encriptação)
 
-**OAEP (Optimal Asymmetric Encryption Padding)**
-- Adiciona padding à mensagem antes de criptografar
-- Melhora segurança semântica
-- Impede ataques de criptoanálise
+**Ameaça: Computadores Quânticos**
+- Algoritmo Shor quebra RSA, ECC, DH em tempo polinomial
+- Pesquisa: Post-Quantum Cryptography
+- Alternativas: Lattice-based, Hash-based
 
-#### Alternativas ao RSA
-
-**Criptografia de Curva Elíptica (ECC)**
-- Baseada em propriedades de curvas algébricas
-- Chaves menores que RSA (256 bits ECC ≈ 3072 bits RSA)
-- Mais eficiente computacionalmente
-- Futuro promissor em criptografia
-
-**ECDSA (Elliptic Curve Digital Signature Algorithm)**
-- Variante de assinatura de ECC
-- Usado em Bitcoin e blockchain
-- Menor tamanho de chave
-
-**Diffie-Hellman**
-- Protocolo de acordo de chave
-- Não para criptografia, mas para estabelecer chave compartilhada
-- Base para forward secrecy em TLS
-
-#### Segurança em Longo Prazo
-
-**Conceitos Importantes:**
-
-1. **Post-Quantum Cryptography**: Algoritmos resistentes a ataques quânticos
-   - Lattice-based cryptography
-   - Hash-based signatures
-   - Multivariate polynomial cryptography
-
-2. **Compromisso de Forward Secrecy**: Mesmo se chave privada for comprometida, mensagens antigas permanecem seguras
-   - Usado em TLS 1.3
-
-3. **Key Rotation**: Renovação periódica de chaves
-
-#### Ataques Comuns em Criptografia Assimétrica
-
-**Ataque de Fatoração**
-- Tentar fatorar n para recuperar p e q
-- Mitigação: Usar primos grandes e bem espaçados
-
-**Ataque de Timing**
-- Analisa tempo de operação criptográfica
-- Mitigação: Usar operações constantes em tempo
-
-**Ataque de Força Bruta**
-- Tentar todas as chaves possíveis
-- Mitigação: Usar chaves suficientemente grandes
-
-**Ataque de Lado de Canal**
-- Explorar consumo de energia, emissões eletromagnéticas
-- Mitigação: Blindagem física, contramedidas de software
+**Segurança Longo Prazo:**
+- Perfect Forward Secrecy: Histórico seguro mesmo se chave comprometida
+- Key Rotation: Trocar chaves periodicamente
+- Monitoring: Detecção de anomalias
 
 ---
 
-### AULA 06 - ESTUDO DE CASO: MOEDAS DIGITAIS
+### ⭐ AULA 06: MOEDAS DIGITAIS (BLOCKCHAIN)
 
-#### O que são Moedas Digitais?
-
-**Moedas Digitais (Criptomoedas)** são meios de troca gerenciados, armazenados ou trocados em ambiente digital, geralmente pela internet, utilizando criptografia para segurança.
-
-#### Bitcoin: Caso de Uso Emblemático
+**Bitcoin = Criptografia Assimétrica em Ação**
 
 **Componentes Criptográficos:**
+1. **SHA-256 (Hashing):** Identifica blocos, prova de trabalho
+2. **ECDSA (Assinatura):** Autoriza transações, não-repúdio
+3. **Chave Pública/Privada:** Propriedade de moedas
 
-1. **Hashing (SHA-256)**
-   - Identifica blocos na blockchain
-   - Prova de Trabalho
-   - Imutabilidade de histórico
-
-2. **Assinatura Digital (ECDSA)**
-   - Verifica propriedade de moedas
-   - Autoriza transferências
-   - Não-repúdio de transações
-
-3. **Chave Pública/Privada**
-   - Chave privada = controle das moedas
-   - Chave pública = endereço visível
-   - Impossível falsificar transferências
-
-#### Blockchain: Fundação Tecnológica
-
-**Estrutura:**
+**Processo de Transação:**
 ```
-[Bloco 1] → [Bloco 2] → [Bloco 3] → ... → [Bloco N]
-  Hash0      Hash1       Hash2            HashN
-  Dados0     Dados1      Dados2           DadosN
+Alice prepara envio
+    ↓
+Assina com chave PRIVADA (ECDSA)
+    ↓
+Rede verifica com chave PÚBLICA de Alice
+    ↓
+Transação entra no pool
+    ↓
+Mineradores calculam Proof of Work
+    ↓
+Bloco adicionado à cadeia
+    ↓
+Transação IRREVERSÍVEL (após ~6 confirmações)
 ```
 
-**Características de Segurança:**
-- Lista encadeada de blocos
-- Cada bloco vinculado ao anterior via hash
-- Alteração de um bloco invalida toda a cadeia
-- Descentralização: cópias em milhares de nós
-
-#### Criptografia em Transações Bitcoin
-
-**Processo de uma Transação:**
-
+**Blockchain: Corrente de Blocos**
 ```
-1. Alice prepara transação enviando Bitcoin para Bob
-2. Transação é assinada com a chave privada de Alice (ECDSA)
-3. Assinatura é verificada com a chave pública de Alice
-4. Transação é propagada pela rede
-5. Mineradores incluem em novo bloco
-6. Bloco é validado por Proof of Work (computação intensiva)
-7. Bloco é adicionado à blockchain
-8. Transação é agora irreversível
+[Bloco 1] → [Bloco 2] → [Bloco 3]
+  Hash0      Hash1      Hash2
+  Dados      Dados      Dados
 ```
+- Cada bloco aponta para anterior
+- Alterar um bloco invalida tudo posterior
+- Descentralizado: cópias em milhares de nós
 
-#### Diferenças: Criptomoeda vs Moeda Digital
+**Criptomoeda vs Moeda Digital:**
 
-| Aspecto | Criptomoeda | Moeda Digital Centralizada |
-|---------|------------|--------------------------|
-| **Controle** | Descentralizado | Controlador centralizado |
-| **Tecnologia** | Blockchain + Criptografia | Criptografia simples |
-| **Segurança** | Muito alta (quebra difícil) | Alta (requer computador potente) |
-| **Reversibilidade** | Quase impossível | Possível |
-| **Exemplos** | Bitcoin, Ethereum | CBDC, Pix |
+| Aspecto | Criptomoeda | Moeda Digital |
+|---------|-----------|--------------|
+| Controle | Descentralizado | Centralizado |
+| Tecnologia | Blockchain | Centralizada |
+| Segurança | Muito alta | Boa |
+| Reversibilidade | Quase impossível | Possível |
 
-#### Desafios Criptográficos em Criptomoedas
-
-1. **Perda de Chave Privada**: Bitcoin perdido para sempre
-2. **Roubo de Chave**: Carteiras hackeadas
-3. **Escalabilidade**: Blockchain Bitcoin: 7 transações/segundo
-4. **Consumo de Energia**: Proof of Work é intensivo
-5. **Privacidade**: Blockchain é transparente (pseudônimo, não anônimo)
-
-#### Aplicações Futuras
-
-- Smart Contracts com criptografia
-- Zero-Knowledge Proofs
-- Privacidade aprimorada (Monero, Zcash)
-- Interoperabilidade entre blockchains
+**Exemplo: Bitcoin (e Ethereum, Litecoin, etc.)**
+- Descentralizado: Sem banco central
+- Pseudoanônimo: Público, mas sob endereços
+- Seguro: Criptografia + descentralização
+- Lento: ~7 tx/seg (Bitcoin), ~15 tx/seg (Litecoin)
 
 ---
 
 ## UNIDADE 4 - CERTIFICAÇÃO DIGITAL
 
----
+### ⭐ AULA 01: PRINCÍPIOS
 
-### AULA 01 - PRINCÍPIOS DE CERTIFICAÇÃO DIGITAL
+**Definição:**
+Usar criptografia para verificar identidade e garantir autenticidade em transações digitais
 
-#### O que é Certificação Digital?
+**Pilares da Segurança:**
 
-**Certificação Digital** é um processo que usa criptografia para verificar e confirmar a identidade de pessoas ou entidades em transações digitais, garantindo autenticidade, confidencialidade e integridade.
+1. **Autenticação:** Identidade verificada e impossível falsificar
+2. **Integridade:** Documentos não podem ser alterados
+3. **Confidencialidade:** Acesso restrito aos autorizados
+4. **Não-repúdio:** Impossível negar ação assinada
 
-#### Funcionamento Básico
+**Assinatura Digital ≠ Eletrônica:**
 
-```
-PROCESSO DE CERTIFICAÇÃO:
-    ↓
-Usuário se identifica presencialmente
-    ↓
-Autoridade Certificadora verifica identidade
-    ↓
-AC gera par de chaves (pública/privada)
-    ↓
-AC emite certificado digital
-    ↓
-Usuário pode usar para assinar e autenticar
-    ↓
-Terceiros verificam autenticidade do certificado
-```
-
-#### Pilares da Certificação Digital
-
-**1. Autenticação**
-- Identidade do usuário é verificada
-- Impossível falsificar identidade
-- Credibilidade é garantida
-
-**2. Integridade**
-- Mensagens não podem ser alteradas
-- Detecção automática de modificações
-- Histórico de transações íntegro
-
-**3. Confidencialidade**
-- Dados são criptografados
-- Acesso restrito aos autorizados
-- Privacidade garantida
-
-**4. Não-repúdio**
-- Usuário não pode negar ação assinada
-- Prova irrefutável de autoria
-- Validade jurídica
-
-#### Assinatura Digital vs Assinatura Eletrônica
-
-| Aspecto | Assinatura Digital | Assinatura Eletrônica |
-|--------|-------------------|----------------------|
-| **Tecnologia** | Criptografia de chave pública | Qualquer método eletrônico |
-| **Segurança** | Muito alta | Variável |
-| **Validade Jurídica** | Plena (lei específica) | Plena em alguns casos |
-| **Repúdio** | Impossível | Possível em alguns casos |
-| **Exemplo** | Certificado ICP-Brasil | Clique em "Concordo" |
-
-#### Vantagens da Certificação Digital
-
-- Elimina necessidade de documento físico
-- Acelera processos comerciais
-- Reduz custos administrativos
-- Aumenta segurança em transações
-- Proporciona validade jurídica
-- Facilita auditoria
-- Possibilita assinatura remota
+| Aspecto | Digital | Eletrônica |
+|---------|---------|-----------|
+| Tecnologia | Criptografia PKI | Qualquer método |
+| Segurança | Muito Alta | Variável |
+| Lei | Plena (específica) | Plena (casos) |
+| Repúdio | Impossível | Possível |
 
 ---
 
-### AULA 02 - CERTIFICADO DIGITAL
+### ⭐ AULA 02: CERTIFICADO DIGITAL
 
-#### O que é um Certificado Digital?
+**O que é:**
+Documento eletrônico que une:
+- Chave pública de usuário
+- Dados de identificação
+- Assinatura digital da AC
 
-Um **Certificado Digital** é um documento eletrônico que vincula:
-- A chave pública de um usuário
-- Informações de identificação do usuário
-- A assinatura digital da Autoridade Certificadora
+É um "RG Digital" confiável
 
-É como um RG/CPF do mundo digital, emitido por autoridade confiável.
+**Padrão: X.509v3 (Internacional)**
 
-#### Estrutura de um Certificado Digital (X.509)
+Contém:
+- Versão
+- Número de série (único)
+- Período de validade
+- Dados do titular
+- Chave pública (2048 bits RSA)
+- Extensões (uso autorizado)
+- Assinatura da AC (valida tudo)
 
-**Padrão Internacional: X.509v3**
+**Tipos Brasileiros:**
 
-```
-CERTIFICADO X.509
-├─ Versão: 3
-├─ Número de série (único)
-├─ Algoritmo de assinatura: sha256WithRSAEncryption
-├─ Emissor: AC que emitiu
-├─ Período de Validade
-│  ├─ Válido a partir de: [data]
-│  └─ Válido até: [data]
-├─ Sujeito (Titular)
-│  ├─ Nome Comum (CN)
-│  ├─ Organização (O)
-│  ├─ Unidade Organizacional (OU)
-│  ├─ Localidade (L)
-│  ├─ Estado (ST)
-│  └─ País (C)
-├─ Informações de Chave Pública
-│  ├─ Algoritmo: RSA
-│  └─ Chave Pública: [2048 bits]
-├─ Extensões
-│  ├─ Key Usage: Digital Signature, Non-Repudiation
-│  ├─ Extended Key Usage: TLS Web Server Authentication
-│  ├─ Subject Alternative Name: domínios alternativos
-│  └─ Authority Key Identifier
-└─ Assinatura da AC (valida integridade)
-```
+| Tipo | Validade | Armazenamento | Segurança | Uso |
+|------|----------|---------------|-----------|-----|
+| **A1** | 1 ano | Arquivo | Baixa | Básico |
+| **A3** | 5 anos | Token USB | Alta | Importante |
 
-#### Componentes Críticos
-
-**1. Nome Comum (CN)**
-- Identifica principal: pessoa ou domínio
-- Exemplo: "João Silva" ou "www.example.com"
-
-**2. Período de Validade**
-- Data de emissão e expiração
-- Certificados A1: 1 ano
-- Certificados A3: até 5 anos
-
-**3. Chave Pública**
-- Armazenada no certificado
-- Usada para verificar assinatura
-
-**4. Assinatura da AC**
-- Garantia de autenticidade
-- Verifica que AC realmente emitiu
-
-#### Tipos de Certificados Digitais no Brasil
-
-**Certificado A1**
-- Validade: 1 ano
-- Armazenamento: Arquivo no computador
-- Fácil de copiar (backup)
-- Mais vulnerável a roubo
-- Recomendado para: Baixa segurança
-
-**Certificado A3**
-- Validade: até 5 anos
-- Armazenamento: Token criptográfico ou cartão USB
-- Deve estar conectado para usar
-- Muito mais seguro
-- Recomendado para: Alta segurança, autenticação bancária
-
-**Certificado e-CPF**
-- Pessoa física
-- Identificação eletrônica
-- Assinatura de documentos
-
-**Certificado e-CNPJ**
-- Pessoa jurídica
-- Autenticação empresarial
-- Assinatura de contratos
-
-#### Ciclo de Vida de um Certificado
-
-```
-EMISSÃO
-  ↓ (válido por 1-5 anos)
-VIGÊNCIA
-  ↓ (pode ser revogado)
-REVOGAÇÃO ou EXPIRAÇÃO
-  ↓
-RENOVAÇÃO (novo certificado) ou FIM
-```
-
-#### Processo de Validação
-
-**Quando alguém recebe certificado:**
-
-```
-1. Verifica assinatura da AC
-2. Valida período de validade
-3. Consulta CRL (Lista de Revogação)
-4. Verifica cadeia até AC-Raiz
-5. Se tudo OK → Certificado válido
-```
+**Tipos por Titular:**
+- e-CPF: Pessoa física
+- e-CNPJ: Pessoa jurídica
 
 ---
 
-### AULA 03 - AUTORIDADES CERTIFICADORAS
+### ⭐ AULA 03: AUTORIDADES CERTIFICADORAS
 
-#### O que é uma Autoridade Certificadora?
+**Função:**
+Empresa pública/privada que emite certificados após verificar identidade
 
-Uma **Autoridade Certificadora (AC)** é uma entidade pública ou privada responsável por:
-- Verificar identidade do solicitante
-- Emitir certificados digitais
-- Manter chaves privadas seguras
-- Revogar certificados
-- Manter lista de revogação
+**É como um Cartório, mas digital**
 
-É o "cartório digital" do mundo digital.
-
-#### Hierarquia de Autoridades Certificadoras
-
-**Modelo Hierárquico (Brasil - ICP-Brasil):**
+**Hierarquia:**
 
 ```
-┌─────────────────────┐
-│   AC-RAIZ (ITI)     │  (Ponto máximo de confiança)
-│  (Instituto Nacional │
-│ Tecnologia Inform.)  │
-└──────────┬──────────┘
-           │
-      ┌────┴────┐
-      ↓         ↓
-┌──────────┐ ┌──────────┐
-│AC NÍVEL 1│ │AC NÍVEL 1│  (ACs Intermediárias/Normativas)
-│ (Exemplo)│ │ (Exemplo)│  (Credenciadas pela Raiz)
-└────┬─────┘ └────┬─────┘
-     │            │
-  ┌──┴──┐      ┌──┴──┐
-  ↓     ↓      ↓     ↓
-┌──┐  ┌──┐   ┌──┐  ┌──┐
-│AC│  │AC│   │AC│  │AC│   (ACs de Segundo Nível)
-└──┘  └──┘   └──┘  └──┘   (Atendem usuários finais)
-  │     │     │     │
-  ↓     ↓     ↓     ↓
-┌──────────────────┐
-│ Usuários Finais  │    (Pessoas e empresas)
-│ (Certificados)   │
-└──────────────────┘
+AC-Raiz (topo, máxima confiança)
+    ↓
+ACs Intermediárias
+    ↓
+ACs de Segundo Nível
+    ↓
+Usuários com Certificados
 ```
 
-#### Estrutura da ICP-Brasil
+**Responsabilidades da AC:**
+- ✅ Verificar identidade presencialmente
+- ✅ Gerar pares de chaves
+- ✅ Emitir certificados
+- ✅ Manter lista de revogação
+- ✅ Revogar se necessário
+- ✅ Proteger chave privada própria
 
-**AC-Raiz** (Topo da Pirâmide)
-- Instituto Nacional de Tecnologia da Informação (ITI)
+**Confiança em uma AC:**
+- Credenciamento em AC superior
+- Conformidade com normas
+- Transparência (publicar procedimentos)
+- Auditoria independente
+- Responsabilidade legal
+
+---
+
+### ⭐ AULA 04: ICP-BRASIL
+
+**Nome Oficial:**
+Infraestrutura de Chaves Públicas Brasileira
+
+**Objetivo:**
+Sistema hierárquico nacional para certificação digital segura e legal
+
+**Criação:**
+- 2001: Medida Provisória 2.200-2
+- 2006: Lei 11.419 (processo eletrônico)
+
+**Topo: AC-Raiz (ITI)**
+- Instituto Nacional de Tecnologia da Informação
 - Define políticas e normas
 - Emite certificados de ACs intermediárias
-- Não emite para usuários finais
-- Chave privada em sala-cofre de segurança máxima
+- Chave privada em sala-cofre ultrassegura
+- Responsável por auditoria
 
-**ACs Intermediárias de Primeiro Nível (Normativas)**
-- Credenciadas pela AC-Raiz
-- Emitem certificados para ACs de segundo nível
-- Também em sala-cofre
-- Exemplo: Serpro, Imprensa Oficial
-
-**ACs de Segundo Nível**
-- Atendem usuários finais
-- Emitem certificados A1 e A3
-- Responsáveis pela verificação de identidade
-- Exemplo: Serasa Experian, Soluti
-
-#### Responsabilidades de uma Autoridade Certificadora
-
-**Emissão**
-- Verificar identidade presencialmente
-- Validar documentos
-- Gerar chaves criptográficas
-- Emitir certificado assinado
-
-**Manutenção**
-- Manter lista de revogação atualizada
-- Armazenar certificados
-- Gerenciar recursos
-- Fazer backups
-
-**Revogação**
-- Cancelar certificados comprometidos
-- Atualizar CRL (Certificate Revocation List)
-- Emitir novo certificado
-
-**Segurança**
-- Proteger chave privada da AC
-- Implementar controles de acesso
-- Fazer auditoria
-- Cumprir conformidade
-
-#### Confiança em uma Autoridade Certificadora
-
-**Critérios para Confiança:**
-
-1. **Credenciamento**: Estar listada na AC-Raiz (para ICP-Brasil)
-2. **Conformidade**: Seguir normas técnicas e operacionais
-3. **Transparência**: Publicar Declaração de Práticas de Certificação (DPC)
-4. **Auditoria**: Passar por auditorias independentes
-5. **Responsabilidade**: Possuir seguros e garantias
-
-**Modelo Web of Trust** (Alternativo)
-- Descentralizado (PGP)
-- Confiança em pares
-- Sem autoridade central
-- Menos formal, mas flexível
-
----
-
-### AULA 04 - INFRAESTRUTURA DE CHAVES PÚBLICAS - BRASIL (ICP-BRASIL)
-
-#### O que é ICP-Brasil?
-
-A **Infraestrutura de Chaves Públicas Brasileira (ICP-Brasil)** é um sistema nacional hierárquico de confiança que viabiliza a emissão, distribuição e revogação de certificados digitais para identificação virtual no Brasil.
-
-#### Criação e Regulamentação
-
-**Marcos Legais:**
-- **Medida Provisória 2.200-2 de 2001**: Criação oficial
-- **Decreto 3.996 de 2001**: Regulamentação
-- **Lei 11.419 de 2006**: Formalização de processo eletrônico
-
-**Objetivo:** Garantir autenticidade, integridade e não-repúdio de documentos em transações eletrônicas.
-
-#### Entes da Cadeia Hierárquica ICP-Brasil
-
-**1. AC-Raiz (Autoridade Certificadora Raiz)**
-- Executada pelo Instituto Nacional de Tecnologia da Informação (ITI)
-- Primeira autoridade da cadeia
-- Emite e gerencia certificados de ACs intermediárias
-- Publica Lista de Certificados Revogados (LCR)
-- Define normas técnicas e operacionais
-- Subordinada ao Comitê Gestor da ICP-Brasil
-
-**Principais Funções:**
-- Emissão de certificados para ACs
-- Auditoria de ACs
-- Manutenção de políticas
-- Revogação de certificados de ACs
-
-**2. ACs Credenciadas (Intermediárias e de Segundo Nível)**
-- Emitem certificados para usuários finais
-- Devem cumprir normas do Comitê Gestor
-- Submetem-se a auditorias regulares
-- Exemplos:
-  - Serpro (Serviço Federal de Processamento de Dados)
-  - Imprensa Oficial do Estado de São Paulo
-  - Serasa Experian
-  - Soluti
-  - ACT BRY
-
-**Responsabilidades:**
-- Verificar identidade do solicitante
-- Emitir certificado
-- Manter lista de revogação
-- Responder por atos
-
-**3. Comitê Gestor da ICP-Brasil**
-- Órgão de supervisão política
-- Define políticas de certificação
-- Composto por representantes de governo, iniciativa privada e sociedade civil
-- Aprova normas técnicas
-
-**4. Autoridades Fiscalizadoras**
-- Auditoram ACs
-- Verificam conformidade
-- Garantem qualidade
-- Protegem consumidor
-
-#### Funcionamento da ICP-Brasil
-
-**Arquitetura:**
+**Hierarquia Brasileira:**
 ```
-┌─────────────────────────────────┐
-│  Comitê Gestor ICP-Brasil       │
-│  (Define políticas)             │
-└────────────┬────────────────────┘
-             │
-┌────────────▼──────────────────┐
-│     AC-Raiz (ITI)             │
-│ (Emite e audita ACs)          │
-└────────────┬──────────────────┘
-             │
-      ┌──────┴─────┐
-      ↓            ↓
- ┌────────┐    ┌────────┐
- │ AC Nível 1  │    │ AC Nível 1   │
- │(Serpro, etc)│    │ (Outro, etc) │
- └────────┬────┘    └────────┬─────┘
-          │                  │
-      ┌───┴──┐            ┌──┴───┐
-      ↓      ↓            ↓      ↓
-  ┌──────┐┌──────┐  ┌──────┐┌──────┐
-  │AC 2º ││AC 2º │  │AC 2º ││AC 2º │
-  │ Nível││ Nível│  │ Nível││ Nível│
-  └──┬───┘└──┬───┘  └──┬───┘└──┬───┘
-     │       │        │       │
-     ↓       ↓        ↓       ↓
-  [Usuários Finais com Certificados]
+┌─────────────────────┐
+│  AC-Raiz (ITI)      │
+└──────────┬──────────┘
+           │
+    ┌──────┴──────┐
+    ↓             ↓
+[AC Nível 1]  [AC Nível 1]
+    │             │
+  ┌─┴─┐         ┌─┴─┐
+  ↓   ↓         ↓   ↓
+[AC2º][AC2º]  [AC2º][AC2º]
+  │   │         │   │
+  ↓   ↓         ↓   ↓
+[USUÁRIOS COM CERTIFICADOS]
 ```
 
-#### Padrões de Certificados ICP-Brasil
+**Comitê Gestor:**
+- Órgão supervisor
+- Define políticas
+- Governo + iniciativa privada + sociedade civil
 
-**Tipos de Certificados:**
+**ACs Credenciadas Exemplos:**
+- Serpro
+- Serasa Experian
+- Soluti
+- ACT BRY
+- Imprensa Oficial
 
-1. **Certificado A1**
-   - Validade: 1 ano
-   - Armazenamento: Arquivo (com senha)
-   - Uso: Pessoas e empresas
-   - Vantagem: Portabilidade
-   - Desvantagem: Menor segurança
-
-2. **Certificado A3**
-   - Validade: até 5 anos
-   - Armazenamento: Token criptográfico
-   - Uso: Alta segurança
-   - Vantagem: Muito seguro
-   - Desvantagem: Precisa de leitor
-
-3. **Certificado A4** (Futuro)
-   - Em desenvolvimento
-   - Baseado em acesso remoto
-
-**Tipos de Titulares:**
-
-- **e-CPF**: Pessoa física
-- **e-CNPJ**: Pessoa jurídica
-- **Certificados de Poder de Autoridade**: Para órgãos públicos
-
-#### Aplicações da ICP-Brasil
-
-**Setor Público**
-- Assinatura de processos administrativos
-- Documentos eletrônicos
-- Licitações e contratos
-- Protocolos
-
-**Setor Privado**
+**Aplicações:**
+- Processos administrativos eletrônicos
 - Assinatura de contratos
-- E-commerce
+- NFe (Nota Fiscal Eletrônica)
 - Operações bancárias
 - Medicina digital
 
-**Documentos Eletrônicos**
-- NFe (Nota Fiscal Eletrônica)
-- RPA (Recibo de Pagamento Autônomo)
-- Petições judiciais eletrônicas
-- Documentos médicos
-
-#### Benefícios da ICP-Brasil
-
-- **Segurança**: Padrão de 2048 bits, criptografia forte
-- **Validade Jurídica**: Reconhecida por lei
-- **Interoperabilidade**: Aceita em órgãos governamentais
-- **Confiabilidade**: Auditorias regulares
-- **Rastreabilidade**: Auditoria completa de ações
-
 ---
 
-### AULA 05 - TÓPICOS EM CERTIFICAÇÃO DIGITAL
+### ⭐ AULA 05: TÓPICOS EM CERTIFICAÇÃO
 
-#### Revogação de Certificados
+**Revogação de Certificados**
 
-**Por que Revogar?**
+Motivos:
 - Chave privada comprometida
-- Usuário deixa a organização
-- Dados do certificado desatualizados
-- Certificado emitido por erro
-- Fim da necessidade
+- Usuário deixa organização
+- Dados desatualizados
+- Erro de emissão
 
-**Processo de Revogação:**
+Métodos:
+- **CRL (Certificate Revocation List):** Lista periódica
+- **OCSP (Online Certificate Status Protocol):** Consulta em tempo real
 
-```
-Solicitação de revogação
-    ↓
-Verificação de identidade
-    ↓
-Confirmação de revogação
-    ↓
-Atualização de CRL
-    ↓
-Publicação em OCSP
-    ↓
-Certificado considerado inválido
-```
+**Validação de Certificados**
 
-**CRL (Certificate Revocation List)**
-- Lista de certificados revogados
-- Publicada periodicamente
-- Baixada antes de usar certificado
-- Lentidão: pode estar desatualizada
-
-**OCSP (Online Certificate Status Protocol)**
-- Consulta em tempo real
-- Responde se certificado está revogado
-- Mais rápido que CRL
-- Padrão moderno
-
-#### Validação e Verificação de Certificados
-
-**Processo de Validação:**
-
+Processo:
 ```
 1. Verifica assinatura da AC
-   └─ Usa chave pública da AC
-
 2. Valida período de vigência
-   └─ Compara data atual com datas do certificado
-
-3. Verifica cadeia de certificação
-   └─ Valida certificado da AC que emitiu
-   └─ Continua até AC-Raiz
-
-4. Consulta status de revogação
-   └─ CRL ou OCSP
-   └─ Verifica se está revogado
-
+3. Verifica cadeia até AC-Raiz
+4. Consulta status (CRL/OCSP)
 5. Valida contra políticas locais
-   └─ Tamanho de chave aceitável?
-   └─ Algoritmo reconhecido?
-
-Se TUDO OK → Certificado Válido ✓
 ```
 
-#### Extensões de Certificado
+**Extensões (Funcionalidades Adicionais)**
 
-**Campos Opcionais que adicionam Funcionalidades:**
+- Key Usage: Digital Signature, Non-Repudiation
+- Extended Key Usage: Web Server Auth, Email, Time Stamping
+- Subject Alternative Name: Domínios alternativos
+- Authority Key Identifier: Chave da AC que emitiu
 
-**Key Usage**
-- Digital Signature
-- Non-Repudiation
-- Key Encipherment
-- Data Encipherment
-- Key Agreement
-- Key Certificate Sign
-- CRL Sign
-- Encipher Only
-- Decipher Only
-
-**Extended Key Usage**
-- TLS Web Server Authentication
-- TLS Web Client Authentication
-- Code Signing
-- Email Protection
-- Time Stamping
-- OCSP Signing
-
-**Subject Alternative Name (SAN)**
-- Domínios alternativos em certificado SSL/TLS
-- Múltiplos domínios em um certificado
-- Exemplo: *.example.com, www.example.com
-
-**Authority Key Identifier**
-- Identifica chave pública da AC que emitiu
-- Facilita validação
-- Evita ambiguidades
-
-#### Certificado de Timestamp
-
-**O que é?**
-- Certificado que marca hora exata
+**Timestamp (Hora Certificada)**
 - Prova que documento existia em determinada data/hora
 - Não-repúdio temporal
-
-**Aplicações:**
-- Validade jurídica de documentos
-- Contratos assinados eletronicamente
-- Prova de anterioridade de propriedade intelectual
-- Conformidade regulatória
+- Validade jurídica permanente
 
 ---
 
-### AULA 06 - ESTUDO DE CASO: SSL/TLS, OPENSSL E HEARTBLEED
+### ⭐ AULA 06: SSL/TLS, OPENSSL, HEARTBLEED
 
-#### O que é SSL/TLS?
+**SSL/TLS: Protocolos de Segurança Web**
 
-**SSL (Secure Sockets Layer)** e **TLS (Transport Layer Security)** são protocolos criptográficos que garantem comunicação segura entre cliente e servidor na internet.
+Função: Garantir comunicação segura entre navegador e servidor HTTPS
 
-**Evolução:**
-- SSL 2.0 (1995) → Obsoleto
-- SSL 3.0 (1996) → Obsoleto
-- TLS 1.0 (1999) → Legado
-- TLS 1.1 (2006) → Legado
-- TLS 1.2 (2008) → Atual
-- TLS 1.3 (2018) → Moderno e Recomendado
+Evolução:
+- SSL 3.0 ❌ Obsoleto
+- TLS 1.0 ❌ Legado
+- TLS 1.2 ✅ Atual
+- TLS 1.3 ✅ Moderno
 
-#### Como Funciona SSL/TLS
-
-**Handshake (Aperto de mão):**
-
+**Handshake TLS (Aperto de Mão):**
 ```
-1. CLIENT HELLO
-   Cliente → Servidor
-   - Versão TLS suportada
-   - Cipher suites disponíveis
-   - Número aleatório
-
-2. SERVER HELLO
-   Servidor → Cliente
-   - Versão TLS escolhida
-   - Cipher suite escolhida
-   - Número aleatório
-
-3. SERVER CERTIFICATE
-   Servidor → Cliente
-   - Certificado digital do servidor
-   - Contém chave pública
-
-4. SERVER KEY EXCHANGE (TLS 1.2)
-   Servidor → Cliente
-   - Parâmetros adicionais
-   - Assinado com chave privada
-
-5. CLIENT KEY EXCHANGE
-   Cliente → Servidor
-   - Pré-chave mestre criptografada
-   - Com chave pública do servidor
-
-6. CHANGE CIPHER SPEC
-   Ambos
-   - Comutação para modo seguro
-
-7. FINISHED
-   Ambos
-   - Confirmação de sucesso
+1. Client Hello: Versão, ciphers suportados, número aleatório
+2. Server Hello: Versão, cipher escolhido, número aleatório
+3. Server Certificate: Certificado do servidor (chave pública)
+4. Server Key Exchange: Parâmetros, assinado
+5. Client Key Exchange: Pré-chave mestre criptografada
+6. Ambos trocam chave de sessão simétrica
+7. FINISHED: Confirma sucesso
 ```
 
-**Após Handshake:**
-- Ambos possuem chave de sessão compartilhada (simétrica)
-- Todos os dados criptografados com essa chave
+Resultado: Chave de sessão simétrica compartilhada, todos dados criptografados
 
-#### Segurança do SSL/TLS
+**OpenSSL: Implementação Padrão**
 
-**Componentes de Segurança:**
-
-1. **Confidencialidade**: Criptografia simétrica (AES)
-2. **Integridade**: HMAC (hash com chave)
-3. **Autenticação**: Certificado digital + assinatura
-4. **Autenticação de Origem**: Certificado do servidor
-
-#### OpenSSL
-
-**O que é?**
-- Implementação de código aberto de SSL/TLS
-- Biblioteca de criptografia robusta
+Biblioteca de código aberto de SSL/TLS
+- Gera chaves RSA
+- Cria certificados
+- Estabelece conexões TLS
 - Padrão da indústria
-- Usado em servidores web, VPNs, email
+- Usado em 99% dos servidores
 
-**Funcionalidades:**
-- Gerar chaves RSA
-- Criar certificados digitais
-- Estabelecer conexões TLS
-- Verificar certificados
-- Encriptar/desencriptar dados
+Versões:
+- 1.0.2: LTS (fim de suporte 2019)
+- 1.1.1: LTS (atual recomendado)
+- 3.0: Novo
 
-**Versões Comuns:**
-```
-OpenSSL 1.0.2 (LTS)
-OpenSSL 1.1.1 (LTS) ← Atual recomendado
-OpenSSL 3.0 (Novo)
-```
+**HEARTBLEED (CVE-2014-0160) - A VULNERABILIDADE**
 
-#### Vulnerabilidade Heartbleed (CVE-2014-0160)
+Data: 7 de abril de 2014
+Severidade: **CRÍTICA** (9.8/10)
+Afetou: ~2 milhões de websites (17% internet)
 
-**Data:** 7 de abril de 2014
-**Severidade:** CRÍTICA (9.8/10)
-**Versões Afetadas:** OpenSSL 1.0.1 até 1.0.1f
+**O que é Heartbeat:**
+Extensão TLS que verifica se conexão está viva
+- Cliente: "Olá, você está aí?"
+- Servidor: "Sim, estou aqui"
 
-**O que é Heartbeat?**
-- Extensão TLS que verifica se conexão ainda está ativa
-- Cliente envia mensagem: "Olá, você está aí?"
-- Servidor responde: "Sim, estou aqui"
-- Mantém conexão viva
-
-**Como Funciona o Exploit:**
+**O BUG:**
 
 ```
-COMUNICAÇÃO NORMAL:
-Cliente envia:  [Dados] "Olá" [Tamanho: 4 bytes]
-                           ↓
+NORMAL:
+Cliente envia: "Olá" [Tamanho: 4 bytes]
 Servidor responde: "Olá"
 
-EXPLOIT HEARTBLEED:
-Cliente envia:  [Dados] "Olá" [Tamanho: 64.000 bytes]
-                           ↓ (BUG!)
+HEARTBLEED:
+Cliente envia: "Olá" [Tamanho: 64.000 bytes] ← MENTIRA!
 Servidor responde: "Olá" + [próximos 63.996 bytes da MEMÓRIA]
-                           ↓
-Atacante obtém: Chaves privadas, senhas, dados sensíveis, etc.
+                     ↓
+            Atacante consegue: CHAVES PRIVADAS! Senhas! Dados!
 ```
 
 **Problema Técnico:**
-- OpenSSL não validava corretamente tamanho do payload
-- Servidor retornava quantidade de bytes solicitada
-- Sem verificar se havia dados suficientes
-- Resulta em vazamento de memória
+OpenSSL não validava corretamente tamanho do payload
+Retornava quantidade de bytes solicitada sem verificar se havia dados
 
-**Dados Vazados Possíveis:**
-- Chave privada do servidor (CRÍTICO!)
+**Dados Vazados:**
+- ⚠️ Chaves privadas do servidor (CRÍTICO!)
 - Senhas de usuários
 - Nomes de usuários
 - Tokens de sessão
-- Dados de clientes
-- Qualquer coisa na memória do servidor
+- Qualquer coisa na memória
 
-#### Impacto do Heartbleed
+**Versões Afetadas:**
+OpenSSL 1.0.1 até 1.0.1f (inclusive)
 
-**Escala:** Afetou ~2 milhões de sites (17% da internet)
-**Críticidade:** Considerado um dos piores bugs de segurança da história
-**Publicação:** Descoberto por Neel Mehta (Google)
+**Websites Impactados:**
+Yahoo, GitHub, Tumblr, OkCupid, Dropbox, Amazon, milhares outros
 
-**Serviços Afetados:**
-- Yahoo
-- GitHub
-- Tumblr
-- OkCupid
-- Dropbox
-- Amazon (em alguns serviços)
-- Muitos servidores de hospedagem
+**Resposta (Patch):**
 
-#### Mitigação e Resposta
-
-**Imediato:**
-1. Atualizar OpenSSL para versão 1.0.1g (patch)
-2. Recompilar sem extensão Heartbeat
-3. Revogar certificados comprometidos
-4. Emitir novos certificados
-5. Forçar troca de senhas de usuários
-
-**OpenSSL 1.0.1g (Lançado 7/4/2014)**
-- Validação corrigida de tamanho de payload
-- Limite de tamanho máximo
-- Verificação de limites
+```
+1. Atualizar para OpenSSL 1.0.1g (lançado 7/4/2014)
+2. Validação corrigida de tamanho de payload
+3. Limite de tamanho máximo implementado
+4. Verificação de limites
+5. Revogação de certificados comprometidos
+6. Emissão de novos certificados
+7. Força troca de senhas
+```
 
 **Lições Aprendidas:**
 
-1. **Importância de Auditoria de Código**: Bug estava escondido há 2 anos
-2. **Testes de Segurança**: Fuzzing teria encontrado
-3. **Responsável Disclosure**: Vulnerabilidade foi divulgada responsavelmente
-4. **Atualização de Software**: Necessidade de patchear rapidamente
-5. **Monitoramento**: Detectar vazamento de dados
+✅ Auditoria de código essencial
+✅ Fuzzing detectaria bug
+✅ Divulgação responsável foi implementada
+✅ Necessidade de atualização rápida
+✅ Monitoramento contínuo obrigatório
 
-#### Proteção Atual
-
-**Mitigações Implementadas:**
-
-1. **OpenSSL Moderno**: Versões seguras sem Heartbleed
-2. **TLS 1.3**: Redesenho completo, mais seguro
-3. **Perfect Forward Secrecy**: Chaves de sessão não comprometem histórico
-4. **Certificate Pinning**: Cliente valida certificado específico
-5. **HSTS**: Força HTTPS
-6. **Monitoramento Contínuo**: Detecção de anormalidades
-
-**Recomendações:**
-- Manter OpenSSL atualizado
-- Usar TLS 1.2 ou superior
-- Implementar Perfect Forward Secrecy
-- Fazer auditoria de segurança
-- Aplicar patches promptamente
-
-#### Lições para Certificação Digital
-
-**A Importância da Confiança:**
-- Certificados devem ser confiáveis
-- Mas infraestrutura subjacente (software) também
-- Segurança é um processo contínuo
-- Vulnerabilidades acontecem
-- Resposta rápida é crítica
+**Segurança Moderna:**
+- OpenSSL atualizado
+- TLS 1.3 (redesenho completo)
+- Perfect Forward Secrecy
+- Certificate Pinning
+- HSTS (força HTTPS)
 
 ---
 
-## RESUMO EXECUTIVO PARA PROVA
+## DICAS FINAIS PARA PROVA
 
-### Conceitos-Chave da Unidade 3
+### Memorização de Fórmulas/Conceitos
 
-1. **CSPRNG**: Geradores aleatórios resistentes a ataques, essenciais para chaves criptográficas
-2. **Criptografia Assimétrica**: Usa par de chaves (pública/privada), soluciona problema de troca segura
-3. **RSA**: Baseado em fatoração de primos, tamanho recomendado 2048 bits, padrão da indústria
-4. **PGP**: Sistema híbrido, usa RSA para chave de sessão e simétrica para dados, autentica com assinatura digital
-5. **Blockchain/Bitcoin**: Usa ECDSA (variante de ECC), hash SHA-256, imutabilidade através de encadeamento
+**RSA:**
+```
+n = p × q
+φ(n) = (p-1) × (q-1)
+(e × d) mod φ(n) = 1
+C = M^e mod n
+M = C^d mod n
+```
 
-### Conceitos-Chave da Unidade 4
+**Validação de Certificado:**
+1. Assinatura da AC
+2. Período de vigência
+3. Cadeia até raiz
+4. Status de revogação
+5. Políticas locais
 
-1. **Certificado Digital**: Vincula chave pública à identidade, padrão X.509, emitido por AC
-2. **Autoridade Certificadora**: Verifica identidade, emite e revoga certificados
-3. **ICP-Brasil**: Hierarquia brasileira com AC-Raiz (ITI) no topo, normas governamentais
-4. **SSL/TLS**: Protocolo para comunicação segura, TLS 1.3 recomendado
-5. **Heartbleed**: Vulnerabilidade crítica em OpenSSL, vazava memória do servidor
+**Hierarquia ICP-Brasil:**
+AC-Raiz (ITI) → ACs Nível 1 → ACs Nível 2 → Usuários
 
-### Questões Típicas de Prova
+### Palavras-Chave para Responder
 
-**"O que torna um CSPRNG diferente de um PRNG?"**
-→ CSPRNG é resistente a ataques, irreversível, impede previsão de sequências, adequado para criptografia
+| Conceito | Palavras-Chave |
+|----------|---|
+| CSPRNG | Aleatório, imprevisível, irreversível, chaves, entropia |
+| RSA | Primos, fatoração, 2048 bits, chave pública/privada |
+| PGP | Híbrido, simétrica+assimétrica, web of trust |
+| Blockchain | Hash, ECDSA, descentralizado, imutável, irreversível |
+| Certificado | X.509, AC, chave pública, integridade, autenticação |
+| ICP-Brasil | Hierárquica, ITI, AC-Raiz, legal, Brasil |
+| Heartbleed | Memória, vazamento, chaves privadas, OpenSSL 1.0.1 |
 
-**"Como funciona o RSA?"**
-→ Gera dois primos grandes (p, q), calcula n=pq, escolhe e, calcula d, chave pública=(e,n), privada=(d,n), segurança baseada em dificuldade de fatoração
+### Comparações Rápidas
 
-**"Por que PGP usa criptografia híbrida?"**
-→ RSA é lento, então usa RSA apenas para criptografar chave de sessão, depois usa simétrica para dados (eficiente e seguro)
+**Simétrica vs Assimétrica:**
+- Simétrica: Uma chave, rápida, problema de troca
+- Assimétrica: Duas chaves, lenta, sem problema de troca
 
-**"O que é certificado digital?"**
-→ Documento eletrônico que vincula chave pública à identidade, emitido por AC, garante autenticidade e não-repúdio
+**A1 vs A3:**
+- A1: 1 ano, arquivo, portável, menos seguro
+- A3: 5 anos, token, seguro, precisa leitor
 
-**"Qual a diferença entre A1 e A3?"**
-→ A1: 1 ano, arquivo (portável, menos seguro). A3: até 5 anos, token (seguro, precisa leitor)
+**Blockchain vs Banco:**
+- Blockchain: Descentralizado, imutável, lento
+- Banco: Centralizado, reversível, rápido
 
-**"O que é Heartbleed?"**
-→ Bug em OpenSSL onde cliente solicitava mais dados que enviou, servidor retornava memória completa, vazando chaves privadas e dados sensíveis
+**TLS 1.2 vs TLS 1.3:**
+- 1.2: Atual, seguro
+- 1.3: Mais rápido, mais seguro, zero-RTT
+
+---
+
+## QUESTÕES PROVÁVEIS DE PROVA (COM RESPOSTAS)
+
+### Nível Fácil
+
+**P: O que é um CSPRNG e por que é importante?**
+R: CSPRNG (Cryptographically Secure PRNG) é um gerador que produz números verdadeiramente aleatórios impossíveis de prever, essencial para gerar chaves criptográficas seguras.
+
+**P: Qual é o tamanho de chave RSA recomendado atualmente?**
+R: 2048 bits é seguro até 2030; 4096 bits para segurança longo prazo.
+
+**P: O que significa não-repúdio?**
+R: O usuário não pode negar ter realizado uma ação (assinado), pois existe prova criptográfica.
+
+---
+
+### Nível Médio
+
+**P: Como funciona o processo de encriptação com PGP?**
+R: (1) Mensagem comprimida, (2) Chave de sessão aleatória gerada, (3) Dados criptografados com simétrica, (4) Chave de sessão criptografada com RSA, (5) Tudo enviado junto.
+
+**P: Qual é a hierarquia da ICP-Brasil e qual a função de cada nível?**
+R: AC-Raiz (define políticas) → ACs Nível 1 (intermediárias) → ACs Nível 2 (usuários finais). Cada nível credencia e audita o inferior.
+
+**P: Como o Heartbleed funciona?**
+R: Cliente envia "Olá" mas diz que tem 64KB, servidor retorna "Olá" + dados da memória, vazando informações sensíveis da memória do servidor.
+
+---
+
+### Nível Difícil
+
+**P: Explique por que RSA é considerado seguro baseado em teoria de números.**
+R: RSA é seguro porque é fácil multiplicar dois primos grandes (pq=n) mas computacionalmente impossível fatorar n de volta em p e q. O algoritmo mais rápido (NFS) é exponencial, levando bilhões de anos.
+
+**P: Compare blockchain (Bitcoin) com sistema bancário centralizado em termos de segurança criptográfica.**
+R: Bitcoin usa ECDSA + SHA-256 + descentralização (milhares de cópias). Qualquer alteração invalida a cadeia. Banco centralizado usa SSL/TLS. Bitcoin é mais seguro criptograficamente mas lento; banco é rápido mas reversível.
+
+**P: Por que Perfect Forward Secrecy é importante em TLS?**
+R: PFS garante que mesmo se a chave privada do servidor for comprometida no futuro, as sessões passadas permanecessem seguras porque cada sessão usou uma chave diferente.
+
+---
+
+## CHECK-LIST PRÉ-PROVA
+
+- [ ] Entendi diferença PRNG vs CSPRNG
+- [ ] Sei gerar chaves RSA (passos)
+- [ ] Conheço funcionamento PGP (híbrido)
+- [ ] Entendi blockchain (Bitcoin)
+- [ ] Sei o que é certificado X.509
+- [ ] Conheço hierarquia ICP-Brasil
+- [ ] Entendo Heartbleed (vazamento memória)
+- [ ] Sei diferenciar A1 vs A3
+- [ ] Conheço pilares de segurança (4)
+- [ ] Sei validar certificado (5 passos)
+- [ ] Entendo assinatura digital
+- [ ] Conheço algoritmos comuns (RSA, ECDSA, SHA-256)
+
+Boa sorte na prova! 🚀
