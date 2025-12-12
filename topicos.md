@@ -1,575 +1,197 @@
-# Guia Rápido de Estudo - Data Warehouses, OLAP e Visualização
+# Guia de Estudos – Data Warehouse, BI, OLAP e Power BI
+Atualizado em: 2025-12-12
 
-## RESUMO EXECUTIVO - UNIDADE 3 & 4
-
----
-
-## UNIDADE 3: DATA WAREHOUSES E OLAP
-
-### 📌 AULA 01: CRIAÇÃO DE DATA WAREHOUSES
-
-**Conceito Central:**
-DW é um repositório centralizado que consolida dados de múltiplas fontes para análise, relatórios e Business Intelligence.
-
-**Definição Rápida:**
-- DW operacional: Dados operacionais, atualizações contínuas
-- DW analítico: Dados históricos, atualizações periódicas
-
-**Componentes Principais:**
-1. Fontes (ERP, CRM, APIs, arquivos)
-2. ETL (Extração, Transformação, Carga)
-3. Staging Area (Preparação intermediária)
-4. Armazenamento Central (Fatos + Dimensões)
-5. Ferramentas BI (OLAP, Dashboards, Power BI)
-
-**Arquitetura 3 Camadas (Padrão):**
-```
-Origem → Staging → DW Central → BI Tools
-```
-
-**Tabela de Fatos vs Dimensão:**
-
-| Fatos | Dimensões |
-|-------|-----------|
-| Dados quantitativos (vendas) | Dados descritivos (quem, o quê) |
-| Chaves estrangeiras | Descrevem contexto |
-| Muitas linhas | Poucas linhas |
-| Exemplo: Venda de 500 reais | Exemplo: Cliente João, Produto A |
-
-**Esquemas Comuns:**
-
-**Star Schema:**
-- Tabela fatos central
-- Dimensões ao redor
-- Simples, rápido, menos normalizado
-
-**Snowflake Schema:**
-- Dimensões normalizadas
-- Mais complexo
-- Economiza espaço
-- Consultas mais complexas
-
-**Criação (Fases):**
-1. Planejamento (objetivos, requisitos)
-2. Design Lógico (DER, fatos/dimensões)
-3. Design Físico (tabelas, storage)
-4. Implementação (criar estrutura)
-5. Carregamento (dados históricos)
-6. Validação (qualidade, performance)
+Este guia reúne as correções e os conceitos-chave cobrados nas duas provas, com resumos, mapas mentais e questões de revisão.
 
 ---
 
-### 📌 AULA 02: MANUTENÇÃO DE DATA WAREHOUSES
+## 1) Conceitos Fundamentais
 
-**Tipos de Manutenção:**
+### 1.1 Data Warehouse (DW)
+- Repositório orientado a análise (OLAP), histórico e integrado de múltiplas fontes.
+- Cargas tipicamente em batch; também há cenários near real-time/streaming, mas não “sempre” em tempo real.
+- Camadas típicas: 
+  - Ingestão/Staging → Integração/Transformação → Apresentação/Consumo.
+- Benefícios: qualidade e consistência, histórico, performance para análise.
 
-**1. Manutenção de Dados**
-- Atualização/Refresh: Novos dados, modificações
-- Limpeza: Remove duplicatas, inconsistências
-- Archiving: Dados antigos
+### 1.2 ETL x ELT
+- ETL: Extrair → Transformar → Carregar (transforma fora do DW).
+- ELT: Extrair → Carregar → Transformar (usa o motor do DW/lakehouse).
+- Em provas, “Transferência” não é o T do ETL.
 
-**2. Manutenção de Performance**
-- Monitoramento: CPU, memória, disk, queries
-- Otimização: Índices, reorganização, estatísticas
+### 1.3 Modelagem de Dados
+- Relacional (OLTP): tabelas normalizadas, transações, operações do dia a dia.
+- Dimensional (OLAP): desnormalização controlada; Tabela Fato (métricas) + Dimensões (contexto).
+- Hierárquico: árvore. Rede: relações complexas em malha.
 
-**3. Manutenção Preventiva**
-- Backup regular
-- Testes de restauração
-- Monitoramento de saúde
-- Alertas automáticos
+### 1.4 Esquemas Analíticos
+- Estrela (Star): fato central + dimensões; simples e performático.
+- Floco de Neve (Snowflake): dimensões normalizadas (mais complexas).
+- Constelação (Galaxy): múltiplos fatos compartilhando dimensões (vários processos).
 
-**4. Manutenção Corretiva**
-- Resolver problemas
-- Recuperar de falhas
-- Data quality issues
+### 1.5 Data Mart e Data Lake
+- Data Mart: subconjunto temático (Vendas, Finanças); pode ser dependente (do DW) ou independente.
+- Data Lake: dados brutos (estruturados, semiestruturados, não estruturados); zonas bronze/prata/ouro; integra-se ao DW ou lakehouse.
 
-**Processo ETL (Essencial para Manutenção):**
-
-```
-EXTRAÇÃO
-├─ Completa: Todos os dados
-└─ Incremental: Apenas novos/modificados
-    ├─ Timestamps
-    ├─ CDC (Change Data Capture)
-    └─ Delta queries
-
-TRANSFORMAÇÃO
-├─ Limpeza de dados
-├─ Validação
-├─ Cálculos
-├─ Conversões
-└─ Enriquecimento
-
-CARREGAMENTO
-├─ Completo: Tudo
-└─ Incremental
-    ├─ Lotes
-    └─ Streaming (tempo real)
-```
-
-**Ciclo de Manutenção:**
-```
-Operação Normal → Detecção → Diagnóstico → Resolução → Verificação → Otimização → Volta
-```
-
-**Ferramentas ETL Populares:**
-- SQL Server Integration Services (SSIS)
-- Apache Airflow
-- Talend
-- Informatica
-- Databricks
-
-**Métricas Importantes:**
-- SLA: Uptime (99.9%), RTO, RPO
-- KPIs: Taxa de erro, performance, fragmentação
+### 1.6 BI, Data Mining e Metadados
+- Business Intelligence: processos/ferramentas para suporte à decisão (dashboards, relatórios, modelos).
+- Data Mining: descoberta de padrões (classificação, clusterização, regras de associação).
+- Dicionário de Dados (metadados): catálogo de tabelas, campos, medidas, dimensões e regras.
 
 ---
 
-### 📌 AULA 03: OLAP (Online Analytical Processing)
+## 2) OLAP e Cubos
 
-**Definição:**
-OLAP permite análise rápida de dados multidimensionais em múltiplas perspectivas.
+### 2.1 Operações em Cubos
+- Slice, Dice, Roll-up, Drill-down, Drill-through, Pivot.
+- Objetivo: permitir agregações e análises complexas com alta performance.
 
-**OLAP vs OLTP:**
+### 2.2 Tipos de OLAP
+- ROLAP: usa dados em bancos relacionais (SQL/visões); boa escala e flexibilidade.
+- MOLAP: armazenamento multidimensional; consultas muito rápidas; pré-agregações.
+- HOLAP: híbrido (detalhes no relacional, agregados no multidimensional).
+- OLAP (termo geral): Processamento Analítico Online.
 
-| OLAP (Análise) | OLTP (Operação) |
-|---|---|
-| Dados históricos | Dados atuais |
-| Multidimensional | Normalizado |
-| Complexas, analíticas | Simples, transacionais |
-| Segundos/minutos | Milissegundos |
-| Analistas | Usuários finais |
-
-**Cubo OLAP:**
-Estrutura multidimensional com Dimensões (categorias) e Medidas (números).
-
-Exemplo:
-- Dimensões: Tempo (Ano, Mês, Dia), Local (País, Estado, Cidade), Produto, Cliente
-- Medidas: Vendas, Custo, Lucro, Quantidade
-
-**Hierarquias em Dimensões:**
-```
-Tempo:
-├─ Ano
-│  ├─ Trimestre
-│  │  ├─ Mês
-│  │  │  └─ Dia
-
-Localização:
-├─ País
-│  └─ Estado
-│     └─ Cidade
-```
+### 2.3 Implementação e Performance
+- Criação de cubos: definição de fatos, dimensões, hierarquias, medidas e agregações.
+- ETL/ELT: integrar, limpar e padronizar dados antes de popular o DW/cubos.
+- Indexação/Particionamento: acelera consultas OLAP e manutenção.
+- Metadados/Dicionário: governança e entendimento dos dados.
 
 ---
 
-### 📌 AULA 04: TÉCNICAS DE IMPLEMENTAÇÃO OLAP
+## 3) Power BI
 
-**Operações Principais em OLAP:**
-
-**1. Drill-Down (Aprofundar)**
-```
-Vendas Brasil 2024 (Total)
-        ↓
-Vendas São Paulo, Minas Gerais, RJ (Estados)
-        ↓
-Vendas São Paulo, Campinas, Santos (Cidades)
-```
-Desce em hierarquia, aumenta detalhe
-
-**2. Roll-Up (Agregar)**
-```
-Vendas por Dia
-    ↑
-Vendas por Semana
-    ↑
-Vendas por Mês
-    ↑
-Vendas por Ano
-```
-Sobe em hierarquia, reduz detalhe (inverso de drill-down)
-
-**3. Slice (Corte)**
-Fixa uma dimensão em valor específico:
-- "Mostrar vendas de 2024" (sem especificar região/produto)
-- Reduz um cubo multidimensional
-
-**4. Dice (Múltiplos Cortes)**
-Seleciona múltiplas dimensões:
-- "Vendas de 2024, SP e MG, produtos A e B"
-
-**5. Pivot (Rotação)**
-Reposiciona dimensões para nova perspectiva:
-```
-Antes: Linhas = Região, Colunas = Trimestre
-Depois: Linhas = Trimestre, Colunas = Região
-```
+- Criação de relatórios e dashboards interativos (KPI, filtros, drill-down).
+- Conectores diversos, modelagem tabular, DAX, Power Query (M).
+- Modos de acesso: Import, DirectQuery, Live Connection; suporta cenários em tempo quase real (streaming, push datasets).
+- Compartilhamento/Governança: workspaces, apps, RLS/OLS.
 
 ---
 
-### 📌 AULA 05: MOLAP, ROLAP, HOLAP (Professor)
+## 4) Visualização: Dashboard, Cockpit e Relatório
 
-**Três Tipos de OLAP:**
-
-**MOLAP (Multidimensional OLAP)**
-- Armazenamento: Estrutura multidimensional (hipercubo)
-- Agregações: Pré-calculadas
-- Performance de Consulta: ⭐⭐⭐⭐⭐ Excelente
-- Performance de Carga: ⭐ Lenta
-- Espaço: Alto
-- Quando usar: Dados que não mudam frequentemente, queries complexas
-- Exemplo: Análise de vendas mensais
-
-**ROLAP (Relational OLAP)**
-- Armazenamento: Tabelas relacionais (Star/Snowflake)
-- Agregações: On-the-fly (sob demanda)
-- Performance de Consulta: ⭐⭐⭐ Boa
-- Performance de Carga: ⭐⭐⭐⭐⭐ Rápida
-- Espaço: Baixo
-- Quando usar: Dados em tempo real, muito volume, flexibilidade
-- Exemplo: Logs de web servers (bilhões de eventos)
-
-**HOLAP (Hybrid OLAP)**
-- Armazenamento: Híbrido (MOLAP + ROLAP)
-- Agregações: Pré-calculadas + on-the-fly
-- Performance de Consulta: ⭐⭐⭐⭐ Muito Boa
-- Performance de Carga: ⭐⭐⭐ Média
-- Espaço: Médio
-- Quando usar: Equilíbrio entre performance e flexibilidade
-- Exemplo: Análise de vendas com atualizações frequentes
-
-**Comparação Rápida:**
-
-| Critério | MOLAP | ROLAP | HOLAP |
-|----------|-------|-------|-------|
-| Velocidade Consulta | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Velocidade Carga | ⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-| Espaço Disco | Alto | Baixo | Médio |
-| Atualização | Periódica | Contínua | Frequente |
-
-**Processo OLAP:**
-```
-1. Definir Requisitos (dimensões, medidas, hierarquias)
-2. Design Lógico (estrutura cubo)
-3. Design Físico (tipo OLAP, storage)
-4. Implementação (ferramenta)
-5. Processamento (carregar, calcular)
-6. Validação (queries, performance)
-7. Implantação (produção)
-```
-
-**Ferramentas OLAP:**
-- Microsoft SQL Server Analysis Services (SSAS)
-- Mondrian (open source, ROLAP)
-- Oracle OLAP
-- IBM Cognos
+- Dashboard: visão consolidada de KPIs, atualização frequente/tempo real, foco executivo.
+- Cockpit: painel gerencial para controle de indicadores e metas.
+- Relatório: apresentação formal e detalhada (tabelas/listagens, auditoria).
 
 ---
 
-### 📌 AULA 06: ESTUDO DE CASO - MOEDAS DIGITAIS
+## 5) Correções – Prova 1
 
-**Blockchain/Bitcoin Analysis com OLAP:**
+1. V/F: “Data warehouses sempre armazenam dados em tempo real.”  
+   - Correto: Falso. DW é majoritariamente histórico; pode haver near real-time, mas não é regra.
 
-**Desafios:**
-- Volume massivo (600k Bitcoin transactions/dia, 1.5M Ethereum/dia)
-- Crescimento contínuo
-- Análises complexas (rastreamento de fundos)
+2. V/F: “ETL significa Extração, Transferência e Carregamento.”  
+   - Correto: Falso. É Extração, Transformação e Carga.
 
-**Recomendação:** HOLAP ou ROLAP (não MOLAP)
-- Razão: Muito volume, dados crescem forever
+3. Frase: Modelo relacional para operacionais (OLTP) e análise multidimensional para DW (OLAP).  
+   - Correto.
 
-**Dimensões Ideais:**
-- Tempo (Ano, Mês, Dia, Hora, Minuto)
-- Ator (Remetente, Destinatário)
-- Tipo de Transação
-- Faixa de Valor
+4. Correspondência – Modelos de dados  
+   - Relacional → Baseado em tabelas.  
+   - Dimensional → Facilita análise por meio de dimensões.  
+   - Hierárquico → Estrutura de árvore.  
+   - Em Rede → Relações complexas.
 
-**Medidas:**
-- Quantidade de transações
-- Valor total
-- Taxa média
-- Tempo de confirmação
+5. Correspondência – Arquiteturas de DW  
+   - Em Camadas → Ingestão, integração/transformação, apresentação/consumo.  
+   - Data Mart → Subconjunto temático do DW.  
+   - Estrela → Predominantemente desnormalizado (fato + dimensões).  
+   - Constelação → Combinação de múltiplos fatos/data marts.
 
-**Análises Possíveis:**
-- Whale watching (grandes transferências)
-- Detecção de fraude
-- Análise de padrão
-- Rastreamento de fundos
+6. Correspondência – Conceitos  
+   - Data Mining → Descoberta de padrões em grandes conjuntos.  
+   - Data Lake → Dados brutos em forma original.  
+   - BI → Ferramentas e técnicas de apoio à decisão.  
+   - Relational Database → Modelo em tabelas.
 
----
-
-## UNIDADE 4: VISUALIZAÇÃO DE DADOS E BI
-
-### 📌 AULA 01: OPERAÇÕES SOBRE CUBOS
-
-As 5 operações fundamentais já explicadas acima (Drill-Down, Roll-Up, Slice, Dice, Pivot).
-
-**Exemplo Integrado:**
-```
-Cubo Original: Vendas[Produto, Região, Período, Categoria]
-
-1. Slice por período 2024
-   → Vendas[Produto, Região, Categoria] apenas 2024
-
-2. Drill-Down em Região
-   → De Regiões para Estados
-
-3. Pivot
-   → Linhas = Produto, Colunas = Período
-
-4. Dice adicional
-   → Apenas produtos A, B, C; periodos Q1, Q2
-```
+7. Frase: “ETL é necessário para integrar dados no DW.”  
+   - Pegadinha: integração pode usar ETL ou ELT; dizer “necessariamente ETL” é enganoso.
 
 ---
 
-### 📌 AULA 02: MODELO DE MATURIDADE DO DATA WAREHOUSE
+## 6) Correções – Prova 2
 
-**Níveis de Maturidade:**
+1. Múltipla escolha – Power BI  
+   - Correto: Permite criação de painéis interativos.
 
-**Nível 1: Inicial (Ad Hoc)**
-- Sem DW formal
-- Relatórios manuais (Excel)
-- Dados em múltiplas fontes
-- Inconsistência
-- Tempo: ~6 meses para evolução
+2. Múltipla escolha – Manutenção do DW  
+   - Correto: Garantir a integridade e atualização dos dados.
 
-**Nível 2: Repetível (Departamental)**
-- Data Marts departamentais
-- ETL definido
-- Qualidade melhorada
-- Tempo: 1-2 anos
+3. Correspondência – Visualização e análise  
+   - Dashboard → Visualização em tempo real/KPIs.  
+   - Cockpit → Controle de indicadores.  
+   - Relatório → Apresentação formal de dados.  
+   - Data Mart → Subconjunto temático (não confundir com Big Data).
 
-**Nível 3: Definido (Corporativo)** ← Alvo típico
-- DW corporativo
-- ETL padronizado
-- Governança de dados
-- Tempo: 2-3 anos
+4. Correspondência – Modelos de maturidade (exemplo em 4 níveis)  
+   - Fase 1 → Inicial.  
+   - Fase 2 → Desenvolvimento/Definido.  
+   - Fase 3 → Otimização/Gerenciado.  
+   - Fase 4 → Verdadeiro/Otimizado (termos variam; mantenha a ordem evolutiva).
 
-**Nível 4: Gerenciado (Otimizado)**
-- DW otimizado
-- SLAs definidos
-- Monitoramento contínuo
-- Tempo: 1-2 anos
+5. Múltipla escolha – Cubos de dados  
+   - Correto: Permitem agregações e análises complexas.
 
-**Nível 5: Otimizado (Inteligente)**
-- IA e ML integrados
-- Previsões automáticas
-- Real-time analytics
-- Tempo: 1-2 anos
+6. Correspondência – Tipos de OLAP  
+   - MOLAP → Usa armazenamento multidimensional.  
+   - ROLAP → Utiliza dados em bancos relacionais.  
+   - HOLAP → Combina MOLAP + ROLAP.  
+   - OLAP → Processamento Analítico Online (conceito).
 
-**Evolução Típica:**
-```
-Inicial → Repetível → Definido → Gerenciado → Otimizado
-(6m)    (1-2a)      (2-3a)      (1-2a)       (1-2a)
-```
+7. Correspondência – Técnicas de implementação  
+   - Criação de cubos → Organização multidimensional.  
+   - ETL → Extrair, Transformar e Carregar.  
+   - Indexação → Acelera consultas OLAP.  
+   - Dicionário de dados → Repositório de metadados (não é data mining).
 
 ---
 
-### 📌 AULA 03: VISUALIZAÇÃO E ANÁLISE DE DADOS
-
-**Tipos de Gráficos e Quando Usar:**
-
-| Gráfico | Uso | Exemplo |
-|---------|-----|---------|
-| Barra/Coluna | Comparar categorias | Vendas por região |
-| Linha | Tendência no tempo | Vendas mensais |
-| Pizza | Proporções de um todo | % de mercado por segmento |
-| Dispersão | Correlação 2 variáveis | Preço vs Quantidade |
-| Área | Evolução acumulada | Receita crescente |
-| Mapa | Dados geográficos | Vendas por estado |
-
-**Princípios de Bom Design:**
-
-✅ **Clareza**
-- Título claro
-- Eixos bem rotulados
-- Legenda visível
-- Sem elementos desnecessários
-
-✅ **Acurácia**
-- Dados corretos
-- Escala apropriada
-- Sem distorções
-
-✅ **Eficiência**
-- Transmitir insight rapidamente
-- Não sobrecarregar
-- Destacar importante
-
-✅ **Estética**
-- Cores harmônicas
-- Fonte legível
-- Espaçamento adequado
-
-**Acessibilidade:**
-- Considerar daltonismo (8% homens)
-- Evitar vermelho + verde juntos
-- Usar múltiplas codificações (cor + padrão)
+## 7) Erros Comuns em Provas
+- Absolutismos: “sempre”, “apenas”, “necessariamente” (ex.: DW em tempo real; ETL obrigatório).
+- Confundir Data Mart com Big Data.
+- Trocar ROLAP/MOLAP/HOLAP.
+- Trocar “Transformação” por “Transferência” no ETL.
+- Confundir camadas de DW com camadas de aplicação (apresentação/lógica/dados).
 
 ---
 
-### 📌 AULA 04: DASHBOARD E COCKPIT
+## 8) Mapas Mentais Rápidos
 
-**Dashboard Executivo:**
-- Alto nível, KPIs
-- 5-10 visualizações
-- Atualização diária/semanal
-- Para decisões estratégicas
-- Exemplo: Dashboard de vendas
+### 8.1 Tipos de OLAP
+- ROLAP → Relacional → SQL/visões → Escala.  
+- MOLAP → Multidimensional → Cubos pré-agregados → Velocidade.  
+- HOLAP → Híbrido → Detalhe no relacional, agregados no multidimensional.
 
-**Cockpit Operacional:**
-- Detalhes, operações
-- 15-20+ visualizações
-- Atualização real-time
-- Para monitoramento contínuo
-- Alertas automáticos
-- Exemplo: Cockpit de produção
+### 8.2 Esquemas
+- Estrela: Fato central + Dimensões.  
+- Floco de Neve: Dimensões normalizadas.  
+- Constelação: Vários fatos, dimensões compartilhadas.
 
-**Diferenças Principais:**
-
-| Aspecto | Dashboard | Cockpit |
-|--------|-----------|---------|
-| Público | Executivos | Operadores |
-| Nível | Alto | Detalhes |
-| Atualização | Periódica | Real-time |
-| Ação | Decisões | Operações |
-| Foco | Tendências | Desvios |
+### 8.3 Visualizações
+- Dashboard: KPI + tempo real.  
+- Cockpit: Controle gerencial.  
+- Relatório: Detalhe formal.
 
 ---
 
-### 📌 AULA 05: POWER BI
-
-**O que é:**
-Plataforma Microsoft de Business Intelligence que transforma dados em visualizações interativas.
-
-**Componentes:**
-- **Power BI Desktop:** Aplicativo para criar (GRATUITO)
-- **Power BI Service:** Cloud para publicar (R$ 50/mês)
-- **Power BI Mobile:** App para celular
-
-**Fluxo de Trabalho:**
-```
-Conectar Dados → Transformar (Power Query) → Modelar → Visualizar → Publicar
-```
-
-**Funcionalidades:**
-- ✅ 200+ conectores de dados
-- ✅ 45+ tipos de visualizações
-- ✅ Integração Microsoft (Excel, Teams)
-- ✅ DAX para cálculos complexos
-- ✅ Segurança enterprise
-- ✅ Compartilhamento fácil
-
-**Power Query (Transformação):**
-- Interface visual low-code
-- Limpeza e validação
-- Combinação de fontes
-- Colunas calculadas
-
-**Modelagem:**
-- Relacionamentos
-- Hierarquias
-- DAX (linguagem de cálculo)
-- Medidas e métricas
-
-**DAX (Data Analysis Expressions) - Exemplos:**
-```
-Total = SUM(Vendas[Valor])
-
-Acima Meta = CALCULATE(SUM(Vendas), Vendas > Meta)
-
-YTD = CALCULATE(SUM(Vendas), DATESYTD(Data[Data]))
-```
-
-**Preços:**
-- Desktop: GRATUITO
-- Power BI Pro: ~R$ 50/mês/usuário
-- Power BI Premium: ~R$ 500-5000/mês (sem limite usuários)
-
-**Vantagens:**
-- Fácil uso
-- Integração Microsoft
-- Comunidade grande
-- Bom custo-benefício
-- Atualizações frequentes
+## 9) Questões de Revisão (pratique)
+1. Cite três diferenças entre OLTP e OLAP.  
+2. Dê exemplos de medidas de uma Tabela Fato e de atributos em duas Dimensões.  
+3. Quando escolher ROLAP em vez de MOLAP? Justifique.  
+4. Explique ETL vs ELT e dê um cenário para cada.  
+5. Desenhe um esquema estrela simples para “Vendas”.  
+6. Liste operações OLAP e um exemplo prático de drill-down.  
+7. O que documentar em um dicionário de dados de BI?
 
 ---
 
-## QUESTÕES PROVÁVEIS DE PROVA (COM RESPOSTAS)
-
-### Nível Fácil
-
-**P: O que é um Data Warehouse?**
-R: Repositório centralizado que consolida dados de múltiplas fontes, organizados para análise e Business Intelligence.
-
-**P: Qual é a diferença entre tabela de fatos e dimensão?**
-R: Fatos armazenam medidas numéricas (vendas, custos). Dimensões armazenam atributos descritivos (cliente, produto, data).
-
-**P: O que é OLAP?**
-R: Processamento Analítico Online, permite análise rápida de dados multidimensionais em múltiplas perspectivas.
+## 10) Referências rápidas
+- Kimball Group – Dimensional Modeling Techniques.  
+- Microsoft Learn – Power BI e DAX (coleções oficiais).  
+- Artigos sobre OLAP (ROLAP, MOLAP, HOLAP) e operações de cubos.
 
 ---
 
-### Nível Médio
-
-**P: Explique as diferenças entre MOLAP, ROLAP e HOLAP.**
-R: MOLAP pré-calcula em estrutura multidimensional (rápido, longo processamento). ROLAP calcula sob demanda em tabelas relacionais (processamento rápido, consultas mais lentas). HOLAP combina ambos (equilíbrio).
-
-**P: O que é drill-down em um cubo OLAP?**
-R: Aumentar nível de detalhe descendo em hierarquia dimensional (ex: Ano → Trimestre → Mês → Dia).
-
-**P: Como escolher entre Star Schema e Snowflake?**
-R: Star Schema é simpler, rápido, menos normalizado. Snowflake é mais normalizado, economiza espaço, mas consultas mais complexas.
-
-**P: Qual é a diferença entre Dashboard e Cockpit?**
-R: Dashboard é para visão estratégica (alto nível, decisões executivas). Cockpit é para monitoramento operacional (tempo real, alertas).
-
----
-
-### Nível Difícil
-
-**P: Descreva o processo completo de implementação de um Data Warehouse.**
-R: 1) Planejamento e requisitos, 2) Design lógico (DER), 3) Design físico (tabelas), 4) Implementação (criar estrutura), 5) Carregamento (ETL), 6) Validação (testes), 7) Implantação (produção) e manutenção contínua.
-
-**P: Por que um cubo OLAP seria melhor que queries SQL diretas para análise?**
-R: OLAP oferece navegação multidimensional intuitiva (drill-down, pivot), agregações pré-calculadas (rápido), visualizações interativas, e insigts ágeis sem escrever SQL complexo.
-
-**P: Em um projeto de análise de 10 bilhões de transações de blockchain, qual tipo OLAP você escolheria e por quê?**
-R: ROLAP ou HOLAP. Razão: Volume massivo (MOLAP seria impraticável), dados crescem continuamente (MOLAP reprocessaria tudo), precisa flexibilidade. ROLAP aceita atualização incremental e escala bem.
-
-**P: Como o Power BI se integra com todo o ecossistema de BI?**
-R: Power BI conecta múltiplas fontes (SQL, Excel, APIs), transforma dados (Power Query), cria modelo semântico, visualiza (45+ gráficos), compartilha em cloud (Service), integra com Teams/Office, e oferece mobile access.
-
----
-
-## CHECKLIST PRÉ-PROVA
-
-- [ ] Entendi diferença entre DW e banco transacional
-- [ ] Sei componentes de uma arquitetura DW
-- [ ] Conheço Star Schema vs Snowflake
-- [ ] Entendo ETL (Extração, Transformação, Carga)
-- [ ] Sei o que é OLAP e para que serve
-- [ ] Conheço MOLAP, ROLAP, HOLAP com diferenças
-- [ ] Entendo operações: Drill-down, Roll-up, Slice, Dice, Pivot
-- [ ] Conheço tipos de gráficos e seus usos
-- [ ] Diferencio Dashboard de Cockpit
-- [ ] Conheço Power BI (componentes, DAX, preços)
-- [ ] Entendo Modelo de Maturidade (5 níveis)
-- [ ] Sei princípios de bom design visual
-
----
-
-## DICAS DE ESTUDO
-
-✅ **Entenda os conceitos antes de memorizar**
-✅ **Use exemplos práticos**
-✅ **Compare MOLAP vs ROLAP vs HOLAP**
-✅ **Visualize arquiteturas (desenhe diagramas)**
-✅ **Pratique identificar melhor tipo de gráfico**
-✅ **Estude casos de uso reais**
-✅ **Revise os 5 níveis de maturidade**
-
----
-
-Boa sorte na prova! 🎓
+Boa prova e bons estudos!
